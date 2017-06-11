@@ -20,6 +20,7 @@
             "prefix": "app",
             "styles": [
                 "../bower_components/bootstrap/dist/css/bootstrap.min.css",
+                "../bower_components/font-awesome/css/font-awesome.min.css",
                 "sass/styles.scss"
             ],
             "scripts": [
