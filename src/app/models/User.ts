@@ -1,12 +1,13 @@
 export class User {
 
     name: String;
-    lastname: String;
+    lastName: String;
+    gender: Boolean;
     email: String;
     address: String;
-    phoneNumber: String;
+    phone: String;
     password: String;
+    role: Number;
     activated: Boolean;
-    role: 1;
-    avatar: String
+    avatarUrl: String
 }
