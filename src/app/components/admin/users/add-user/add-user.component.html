@@ -1,49 +1,25 @@
 <div class="container">
     <div class="row">
-        <form [formGroup]="addUserForm" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <form [formGroup]="addUserForm" (ngSubmit)="addUser()" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
             <div class="row">
-                <div class="form-group col-sm-6">
+                <div [ngClass]="{'has-error': formErrors.name}" class="form-group col-sm-6">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name" #name>
+                    <input type="text" formControlName="name" class="form-control" id="name" placeholder="Name">
+                    <small *ngIf="formErrors.name" class="form-control-response">{{formErrors.name}}</small>
                 </div>
-                <div class="form-group col-sm-6">
+                <div [ngClass]="{'has-error': formErrors.lastName}" class="form-group col-sm-6">
                     <label for="lastname">Lastname</label>
-                    <input type="text" class="form-control" id="lastname" placeholder="Lastname" #lastname>
+                    <input type="text" formControlName="lastName" class="form-control" id="lastname" placeholder="Lastname">
+                    <small *ngIf="formErrors.lastName" class="form-control-response">{{formErrors.lastName}}</small>
                 </div>
-                <div class="form-group col-sm-6">
-                    <label>Gender</label>
-                    <div>
-                        <label class="radio-inline">
-                            <input type="radio" name="gender" id="gender-male" value="1" checked> Male
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="gender" id="gender-female" value="0"> Female
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group col-sm-6">
+                <div [ngClass]="{'has-error': formErrors.email}" class="form-group col-sm-6">
                     <label for="email">Email address</label>
-                    <input type="email" class="form-control" id="email" placeholder="Email" #email>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label for="phone">Phone Number</label>
-                    <input type="text" class="form-control" id="phone" placeholder="Phone Number" #phone>
-                </div>
-                <div class="form-group col-sm-12">
-                    <label for="address">Address</label>
-                    <input type="text" class="form-control" id="address" placeholder="Address" #address>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password" #password>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" #password>
+                    <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email">
+                    <small *ngIf="formErrors.email" class="form-control-response">{{formErrors.email}}</small>
                 </div>
                 <div class="form-group col-sm-6">
                     <label>Role</label>
-                    <select class="form-control">
+                    <select class="form-control" formControlName="role">
                         <option value="1">User</option>
                         <option value="2">Card Holder</option>
                         <option value="3">Discount Provider</option>
@@ -51,32 +27,51 @@
                     </select>
                 </div>
                 <div class="form-group col-sm-6">
+                    <label>Gender</label>
+                    <div>
+                        <label class="radio-inline">
+                            <input type="radio" formControlName="gender" [value]="true"> Male
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" formControlName="gender" [value]="false"> Female
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" formControlName="phone" class="form-control" id="phone" placeholder="Phone Number">
+                </div>
+                <div class="form-group col-sm-12">
+                    <label for="address">Address</label>
+                    <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address">
+                </div>
+                <div [ngClass]="{'has-error': formErrors.password}" class="form-group col-sm-6">
+                    <label for="password">Password</label>
+                    <input type="password" formControlName="password" class="form-control" id="password" placeholder="Password">
+                    <small *ngIf="formErrors.password" class="form-control-response">{{formErrors.password}}</small>
+                </div>
+                <div [ngClass]="{'has-error': formErrors.confirmPassword}" class="form-group col-sm-6">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" formControlName="confirmPassword" class="form-control" id="confirm-password" placeholder="Confirm Password">
+                    <small *ngIf="formErrors.confirmPassword" class="form-control-response">{{formErrors.confirmPassword}}</small>
+                </div>
+                <div class="form-group col-sm-6">
                     <label for="avatar">Avatar</label>
-                    <input type="text" class="form-control" id="avatar" placeholder="Avatar" #avatar>
+                    <input type="text" formControlName="avatarUrl" class="form-control" id="avatar" placeholder="Avatar" #avatar>
                 </div>
                 <div class="form-group col-sm-6">
                     <label>Is Activated</label>
                     <div>
                         <label class="radio-inline">
-                            <input type="radio" name="activated" id="activated-true" value="1"> Yes
+                            <input type="radio" formControlName="activated" [value]="true"> Yes
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="activated" id="activated-false" value="0" checked> No
+                            <input type="radio" formControlName="activated" [value]="false"> No
                         </label>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success pull-right" (click)="addUser({
-                name: name.value,
-                lastname: lastname.value,
-                email: email.value,
-                password: password.value,
-                address: address.value,
-                phone: phone.value,
-                avatar: avatar.value
-            })">
-                Submit
-            </button>
+            <button type="submit" class="btn btn-success pull-right">Submit</button>
         </form>
     </div>
 </div>

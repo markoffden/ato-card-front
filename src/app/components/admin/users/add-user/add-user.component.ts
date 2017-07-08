@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
+import {FormGroup, FormBuilder, FormControl, Validators, AbstractControl} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
 @Component({
@@ -15,27 +15,76 @@ export class AddUserComponent {
 
     addUserForm: FormGroup;
 
-    addUser(user) {
-        var result: any;
-        console.log(user);
-        result = this._userService.saveUser(user);
-        result.subscribe(x => {
-            console.log(x);
+    buildForm(): void {
+        this.addUserForm = this._formBuilder.group({
+            name: [null, Validators.required],
+            lastName: [null, Validators.required],
+            gender: [true],
+            email: [null, Validators.required],
+            address: [null],
+            phone: [null],
+            password: [null, Validators.required],
+            confirmPassword: [null, Validators.required],
+            role: [1],
+            activated: [false],
+            avatarUrl: [null]
         });
+
+        this.addUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
+
+        this.onValueChanged();
     }
 
-    buildForm() {
-        this.addUserForm = this._formBuilder.group({
-            name: this._formBuilder.control(''),
-            lastName: this._formBuilder.control(''),
-            gender: this._formBuilder.control(true),
-            email: this._formBuilder.control(''),
-            address: this._formBuilder.control(''),
-            phone: this._formBuilder.control(''),
-            password: this._formBuilder.control(''),
-            role: this._formBuilder.control(1),
-            activated: this._formBuilder.control(false),
-            avatarUrl: this._formBuilder.control('')
-        });
+    onValueChanged(data?: any) {
+        if (!this.addUserForm) { return; }
+        const form = this.addUserForm;
+        for (const field in this.formErrors) {
+
+            this.formErrors[field] = '';
+            const control = form.get(field);
+
+            if (control && control.dirty && !control.valid) {
+                const messages = this.errorMessages[field];
+                for (const key in control.errors) {
+                    this.formErrors[field] += messages[key] + ' ';
+                }
+            }
+        }
+    }
+
+    formErrors = {
+        'name': '',
+        'lastName': '',
+        'email': '',
+        'password': '',
+        'confirmPassword': ''
+    };
+
+    errorMessages = {
+        'name': {
+            'required': "Це поле є обов'язковим"
+        },
+        'lastName': {
+            'required': "Це поле є обов'язковим"
+        },
+        'email': {
+            'required': "Це поле є обов'язковим"
+        },
+        'password': {
+            'required': "Це поле є обов'язковим"
+        },
+        'confirmPassword': {
+            'required': "Це поле є обов'язковим"
+        }
+    };
+
+    addUser() {
+        console.log(this.addUserForm.value);
+        // var result: any;
+        // console.log(user);
+        // result = this._userService.saveUser(user);
+        // result.subscribe(x => {
+        //     console.log(x);
+        // });
     }
 }
