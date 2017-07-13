@@ -17,14 +17,14 @@ export class AddUserComponent {
 
     buildForm(): void {
         this.addUserForm = this._formBuilder.group({
-            name: [null, Validators.required],
-            lastName: [null, Validators.required],
+            name: [null, [Validators.required, Validators.minLength(2)]],
+            lastName: [null, [Validators.required, Validators.minLength(2)]],
             gender: [true],
             email: [null, Validators.required],
             address: [null],
             phone: [null],
-            password: [null, Validators.required],
-            confirmPassword: [null, Validators.required],
+            password: [null, [Validators.required, Validators.minLength(8)]],
+            confirmPassword: [null, [Validators.required, Validators.minLength(8)]],
             role: [1],
             activated: [false],
             avatarUrl: [null]
@@ -62,21 +62,31 @@ export class AddUserComponent {
 
     errorMessages = {
         'name': {
-            'required': "Це поле є обов'язковим"
+            required: "Це поле є обов'язковим",
+            minlength: "Ім'я не може бути коротшим 2-ох літер"
         },
         'lastName': {
-            'required': "Це поле є обов'язковим"
+            required: "Це поле є обов'язковим",
+            minlength: "Прізвище не може бути коротшим 2-ох літер"
         },
         'email': {
-            'required': "Це поле є обов'язковим"
+            required: "Це поле є обов'язковим"
         },
         'password': {
-            'required': "Це поле є обов'язковим"
+            required: "Це поле є обов'язковим",
+            minlength: "Пароль не може бути коротшим 8-ми літер"
         },
         'confirmPassword': {
-            'required': "Це поле є обов'язковим"
+            required: "Це поле є обов'язковим",
+            minlength: "Пароль не може бути коротшим 8-ми літер"
         }
     };
+
+    onSubmit() {
+        if (this.addUserForm.valid) {
+            this.addUser();
+        }
+    }
 
     addUser() {
         console.log(this.addUserForm.value);
