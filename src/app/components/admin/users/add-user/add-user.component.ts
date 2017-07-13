@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {FormGroup, FormBuilder, FormControl, Validators, AbstractControl} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
+import {CustomValidators} from "../../../../shared/custom-validators";
+
 @Component({
     selector: 'add-user',
     templateUrl: 'add-user.component.html'
@@ -20,14 +22,16 @@ export class AddUserComponent {
             name: [null, [Validators.required, Validators.minLength(2)]],
             lastName: [null, [Validators.required, Validators.minLength(2)]],
             gender: [true],
-            email: [null, Validators.required],
+            email: [null, [Validators.email]],
             address: [null],
             phone: [null],
             password: [null, [Validators.required, Validators.minLength(8)]],
-            confirmPassword: [null, [Validators.required, Validators.minLength(8)]],
+            confirmPassword: [null],
             role: [1],
             activated: [false],
             avatarUrl: [null]
+        }, {
+            validator: CustomValidators.matchValue('confirmPassword', 'password')
         });
 
         this.addUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -70,15 +74,14 @@ export class AddUserComponent {
             minlength: "Прізвище не може бути коротшим 2-ох літер"
         },
         'email': {
-            required: "Це поле є обов'язковим"
+            email: "Невірний формат електронної адреси"
         },
         'password': {
             required: "Це поле є обов'язковим",
             minlength: "Пароль не може бути коротшим 8-ми літер"
         },
         'confirmPassword': {
-            required: "Це поле є обов'язковим",
-            minlength: "Пароль не може бути коротшим 8-ми літер"
+            notMatching: "Пароль не підтверджено"
         }
     };
 
