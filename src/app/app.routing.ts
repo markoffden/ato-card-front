@@ -11,38 +11,15 @@ import {OutletListComponent} from "./components/admin/outlets/outlet-list/outlet
 import {AddOutletComponent} from "./components/admin/outlets/add-outlet/add-outlet.component";
 
 const appRoutes: Routes = [
-    {
-        path: '',
-        component: HomeComponent
-    },
-    {
-        path: 'admin',
-        component: AdminComponent
-    },
-    {
-        path: 'admin/users',
-        component: UserListComponent
-    },
-    {
-        path: 'admin/users/add-new',
-        component: AddUserComponent
-    },
-    {
-        path: 'admin/cards',
-        component: CardListComponent
-    },
-    {
-        path: 'admin/cards/add-new',
-        component: AddCardComponent
-    },
-    {
-        path: 'admin/outlets',
-        component: OutletListComponent
-    },
-    {
-        path: 'admin/outlets/add-new',
-        component: AddOutletComponent
-    }
+    { path: '', component: HomeComponent },
+    { path: 'admin', component: AdminComponent, children: [
+        { path: 'users', component: UserListComponent },
+        { path: 'users/add-new', component: AddUserComponent },
+        { path: 'cards', component: CardListComponent },
+        { path: 'cards/add-new', component: AddCardComponent },
+        { path: 'outlets', component: OutletListComponent },
+        { path: 'outlets/add-new', component: AddOutletComponent }
+    ]}
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

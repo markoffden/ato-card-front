@@ -12,18 +12,18 @@
                 </div><!-- .input-group -->
             </li>
             <li>
-                <a routerLink="/admin/users"><i class="fa fa-users fa-fw"></i> Користувачі</a>
+                <a routerLink="users"><i class="fa fa-users fa-fw"></i> Користувачі</a>
             </li>
             <li>
-                <a routerLink="/admin/cards"><i class="fa fa-id-card fa-fw"></i> Карти</a>
+                <a routerLink="cards"><i class="fa fa-id-card fa-fw"></i> Карти</a>
             </li>
             <li>
-                <a routerLink="/admin/outlets"><i class="fa fa-shopping-basket fa-fw"></i> Точки знижок</a>
+                <a routerLink="outlets"><i class="fa fa-shopping-basket fa-fw"></i> Точки знижок</a>
             </li>
         </ul>
     </div><!-- .navbar-static-side -->
 </div><!-- .sidebar-collapse -->
 
-<div id="page-wrapper">
-
+<div class="page-wrapper">
+    <router-outlet></router-outlet>
 </div><!-- #page-wrapper -->
