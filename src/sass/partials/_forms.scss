@@ -18,3 +18,17 @@
         }
     }
 }
+
+// --- Datepicker
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+.ngxmdp .selector {
+    top: 25px;
+}
+
+.date-picker[readonly] {
+    background-color: white;
+}
