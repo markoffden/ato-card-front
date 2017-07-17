@@ -1,3 +1,36 @@
-<p>
-  add-card works!
-</p>
+<div class="container">
+    <div class="row">
+        <form [formGroup]="addCardForm" (ngSubmit)="onSubmit()" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+            <div class="row">
+                <div [ngClass]="{'has-error': formErrors.number}" class="form-group col-sm-6">
+                    <label for="number">Номер карти</label>
+                    <input type="text" formControlName="number" class="form-control" id="number" placeholder="Номер карти">
+                    <small *ngIf="formErrors.number" class="form-control-response">{{formErrors.number}}</small>
+                </div>
+                <div [ngClass]="{'has-error': formErrors.holder}" class="form-group col-sm-6">
+                    <label for="holder">Власник</label>
+                    <input type="text" formControlName="holder" class="form-control" id="holder" placeholder="Власник">
+                    <small *ngIf="formErrors.holder" class="form-control-response">{{formErrors.holder}}</small>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="dateIssued">Дата видачі</label>
+                    <div class="input-group">
+                        <input type="text" formControlName="dateIssued" class="form-control date-picker" id="dateIssued" placeholder="Дата видачі" [options]="datepickerOpts" ngx-mydatepicker #dp="ngx-mydatepicker" readonly>
+                        <div class="input-group-addon" (click)="dp.toggleCalendar()">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>Статус</label>
+                    <select class="form-control" formControlName="status">
+                        <option value="1">Неактивна</option>
+                        <option value="2">Активна/видана</option>
+                        <option value="3">Загублена</option>
+                    </select>
+                </div>
+            </div>
+            <button [disabled]="!addCardForm.valid" type="submit" class="btn btn-success pull-right">Додати карту</button>
+        </form>
+    </div>
+</div>
