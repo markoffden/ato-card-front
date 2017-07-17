@@ -1,10 +1,10 @@
 export class Outlet {
 
     name: String;
+    discountType: String;
     address: String;
-    description: String;
-    type: Number;
-    latitude: Number;
     longitude: Number;
+    latitude: Number;
+    type: Number;
     provider: any;
 }
