@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 
@@ -7,9 +7,9 @@ import {INgxMyDpOptions} from 'ngx-mydatepicker';
   templateUrl: 'add-card.component.html'
 })
 
-export class AddCardComponent {
+export class AddCardComponent implements AfterViewInit {
 
-    private datepickerOpts: INgxMyDpOptions = {
+    datePickerOpts: INgxMyDpOptions = {
         dayLabels: {
             su: 'Нед',
             mo: 'Пон',
@@ -46,7 +46,7 @@ export class AddCardComponent {
     buildForm(): void {
         this.addCardForm = this._formBuilder.group({
             number: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(12)]],
-            dateIssued: [new Date()],
+            dateIssued: [null],
             holder: [null],
             status: [1]
         });
@@ -73,14 +73,21 @@ export class AddCardComponent {
         }
     }
 
+    ngAfterViewInit() {
+
+    }
+
     setDate(): void {
         let date = new Date();
-        this.addCardForm.setValue({dateIssued: {
-            date: {
-                year: date.getFullYear(),
-                month: date.getMonth() + 1,
-                day: date.getDate()}
-        }});
+        this.addCardForm.setValue({
+            dateIssued: {
+                date: {
+                    year: date.getFullYear(),
+                    month: date.getMonth() + 1,
+                    day: date.getDate()
+                }
+            }
+        });
     }
 
     clearDate(): void {
