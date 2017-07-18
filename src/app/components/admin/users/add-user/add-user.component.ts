@@ -1,21 +1,30 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
 import {CustomValidators} from "../../../../shared/custom-validators";
+import {FormsService} from "../../../../services/forms.service";
 
 @Component({
     selector: 'add-user',
     templateUrl: 'add-user.component.html'
 })
 
-export class AddUserComponent {
+export class AddUserComponent implements OnInit {
 
-    constructor(private _formBuilder: FormBuilder, private _userService: UserService) {
+    addUserForm: FormGroup;
+
+    errorMessages;
+
+    constructor(private _formBuilder: FormBuilder, private _userService: UserService, private _formsService: FormsService) {
         this.buildForm();
     }
 
-    addUserForm: FormGroup;
+    ngOnInit() {
+        this._formsService.getErrorMessages('user').subscribe(res => {
+            this.errorMessages = res;
+        });
+    }
 
     buildForm(): void {
         this.addUserForm = this._formBuilder.group({
@@ -34,27 +43,13 @@ export class AddUserComponent {
             validator: CustomValidators.matchValue('confirmPassword', 'password')
         });
 
-        this.addUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
+        this.addUserForm.valueChanges.subscribe(data => this.onValueChanged(this.addUserForm, data));
 
-        this.onValueChanged();
+        this.onValueChanged(this.addUserForm);
     }
 
-    onValueChanged(data?: any) {
-        if (!this.addUserForm) { return; }
-        const form = this.addUserForm;
-        for (const field in this.formErrors) {
-
-            this.formErrors[field] = '';
-            const control = form.get(field);
-
-            if (control && control.dirty && !control.valid) {
-                const messages = this.errorMessages[field];
-                for (const key in control.errors) {
-                    this.formErrors[field] += messages[key] + ' ';
-                }
-            }
-        }
-    }
+    // form validation
+    onValueChanged = this._formsService.processErrors.bind(this);
 
     formErrors = {
         'name': '',
@@ -62,27 +57,6 @@ export class AddUserComponent {
         'email': '',
         'password': '',
         'confirmPassword': ''
-    };
-
-    errorMessages = {
-        'name': {
-            required: "Це поле є обов'язковим",
-            minlength: "Ім'я не може бути коротшим 2-ох літер"
-        },
-        'lastName': {
-            required: "Це поле є обов'язковим",
-            minlength: "Прізвище не може бути коротшим 2-ох літер"
-        },
-        'email': {
-            email: "Невірний формат електронної адреси"
-        },
-        'password': {
-            required: "Це поле є обов'язковим",
-            minlength: "Пароль не може бути коротшим 8-ми літер"
-        },
-        'confirmPassword': {
-            notMatching: "Пароль не підтверджено"
-        }
     };
 
     onSubmit() {

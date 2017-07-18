@@ -11,7 +11,6 @@ export class UserService {
     }
 
     getUsers() {
-        console.log(this._globals.API_URL);
         return this._http.get(this._globals.API_URL + '/users').map(res => res.json());
     }
 

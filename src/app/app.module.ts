@@ -21,6 +21,7 @@ import { CardListComponent } from './components/admin/cards/card-list/card-list.
 import { AddCardComponent } from './components/admin/cards/add-card/add-card.component';
 import { OutletListComponent } from './components/admin/outlets/outlet-list/outlet-list.component';
 import { AddOutletComponent } from './components/admin/outlets/add-outlet/add-outlet.component';
+import {FormsService} from "./services/forms.service";
 
 @NgModule({
     declarations: [
@@ -43,7 +44,7 @@ import { AddOutletComponent } from './components/admin/outlets/add-outlet/add-ou
         routing,
         NgxMyDatePickerModule
     ],
-    providers: [Globals, UserService],
+    providers: [Globals, UserService, FormsService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
