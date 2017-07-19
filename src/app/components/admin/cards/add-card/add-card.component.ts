@@ -1,13 +1,16 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
+import {FormService} from "../../../../services/form.service";
 
 @Component({
   selector: 'add-card',
   templateUrl: 'add-card.component.html'
 })
 
-export class AddCardComponent implements AfterViewInit {
+export class AddCardComponent implements OnInit {
+
+    errorMessages;
 
     datePickerOpts: INgxMyDpOptions = {
         dayLabels: {
@@ -37,73 +40,52 @@ export class AddCardComponent implements AfterViewInit {
         dateFormat: 'dd.mm.yyyy'
     };
 
-    constructor(private _formBuilder: FormBuilder) {
+    constructor(private _fb: FormBuilder, private _fs: FormService) {
         this.buildForm();
+    }
+
+    ngOnInit() {
+        this._fs.getErrorMessages('card').subscribe(res => {
+            this.errorMessages = res;
+        });
     }
 
     addCardForm: FormGroup;
 
     buildForm(): void {
-        this.addCardForm = this._formBuilder.group({
+        this.addCardForm = this._fb.group({
             number: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(12)]],
             dateIssued: [null],
             holder: [null],
             status: [1]
         });
 
-        this.addCardForm.valueChanges.subscribe(data => this.onValueChanged(data));
+        this.addCardForm.valueChanges.subscribe(data => this.onValueChanged(this.addCardForm, data));
 
-        this.onValueChanged();
+        this.onValueChanged(this.addCardForm);
     }
 
-    onValueChanged(data?: any) {
-        if (!this.addCardForm) { return; }
-        const form = this.addCardForm;
-        for (const field in this.formErrors) {
+    onValueChanged = this._fs.processErrors.bind(this);
 
-            this.formErrors[field] = '';
-            const control = form.get(field);
-
-            if (control && control.dirty && !control.valid) {
-                const messages = this.errorMessages[field];
-                for (const key in control.errors) {
-                    this.formErrors[field] += messages[key] + ' ';
-                }
-            }
-        }
-    }
-
-    ngAfterViewInit() {
-
-    }
-
-    setDate(): void {
-        let date = new Date();
-        this.addCardForm.setValue({
-            dateIssued: {
-                date: {
-                    year: date.getFullYear(),
-                    month: date.getMonth() + 1,
-                    day: date.getDate()
-                }
-            }
-        });
-    }
-
-    clearDate(): void {
-        this.addCardForm.setValue({dateIssued: null});
-    }
+    // setDate(): void {
+    //     let date = new Date();
+    //     this.addCardForm.setValue({
+    //         dateIssued: {
+    //             date: {
+    //                 year: date.getFullYear(),
+    //                 month: date.getMonth() + 1,
+    //                 day: date.getDate()
+    //             }
+    //         }
+    //     });
+    // }
+    //
+    // clearDate(): void {
+    //     this.addCardForm.setValue({dateIssued: null});
+    // }
 
     formErrors = {
         'number': ''
-    };
-
-    errorMessages = {
-        'number': {
-            required: "Це поле є обов'язковим",
-            minlength: "Номер не може бути коротшим 2-ох символів",
-            maxlength: "Номер не може бути довшим 12-ти символів"
-        }
     };
 
     onSubmit() {

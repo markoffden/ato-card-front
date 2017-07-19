@@ -1,20 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormService} from "../../../../services/form.service";
 
 @Component({
   selector: 'add-outlet',
   templateUrl: 'add-outlet.component.html'
 })
-export class AddOutletComponent {
 
-    constructor(private _formBuilder: FormBuilder) {
+export class AddOutletComponent implements OnInit {
+
+    errorMessages;
+
+    constructor(private _fb: FormBuilder, private _fs: FormService) {
         this.buildForm();
+    }
+
+    ngOnInit() {
+        this._fs.getErrorMessages('outlet').subscribe(res => {
+            this.errorMessages = res;
+        });
     }
 
     addOutletForm: FormGroup;
 
     buildForm(): void {
-        this.addOutletForm = this._formBuilder.group({
+        this.addOutletForm = this._fb.group({
             name: [null, Validators.required],
             discountType: [null, Validators.required],
             address: [null, Validators.required],
@@ -24,48 +34,18 @@ export class AddOutletComponent {
             provider: [null, Validators.required]
         });
 
-        this.addOutletForm.valueChanges.subscribe(data => this.onValueChanged(data));
+        this.addOutletForm.valueChanges.subscribe(data => this.onValueChanged(this.addOutletForm, data));
 
-        this.onValueChanged();
+        this.onValueChanged(this.addOutletForm);
     }
 
-    onValueChanged(data?: any) {
-        if (!this.addOutletForm) { return; }
-        const form = this.addOutletForm;
-        for (const field in this.formErrors) {
-
-            this.formErrors[field] = '';
-            const control = form.get(field);
-
-            if (control && control.dirty && !control.valid) {
-                const messages = this.errorMessages[field];
-                for (const key in control.errors) {
-                    this.formErrors[field] += messages[key] + ' ';
-                }
-            }
-        }
-    }
+    onValueChanged = this._fs.processErrors.bind(this);
 
     formErrors = {
         'name': '',
         'discountType': '',
         'address': '',
         'provider': ''
-    };
-
-    errorMessages = {
-        'name': {
-            required: "Це поле є обов'язковим"
-        },
-        'discountType': {
-            required: "Це поле є обов'язковим"
-        },
-        'address': {
-            required: "Це поле є обов'язковим"
-        },
-        'provider': {
-            required: "Це поле є обов'язковим"
-        }
     };
 
     onSubmit() {

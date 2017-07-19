@@ -3,7 +3,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
 import {CustomValidators} from "../../../../shared/custom-validators";
-import {FormsService} from "../../../../services/forms.service";
+import {FormService} from "../../../../services/form.service";
 
 @Component({
     selector: 'add-user',
@@ -16,18 +16,18 @@ export class AddUserComponent implements OnInit {
 
     errorMessages;
 
-    constructor(private _formBuilder: FormBuilder, private _userService: UserService, private _formsService: FormsService) {
+    constructor(private _fb: FormBuilder, private _us: UserService, private _fs: FormService) {
         this.buildForm();
     }
 
     ngOnInit() {
-        this._formsService.getErrorMessages('user').subscribe(res => {
+        this._fs.getErrorMessages('user').subscribe(res => {
             this.errorMessages = res;
         });
     }
 
     buildForm(): void {
-        this.addUserForm = this._formBuilder.group({
+        this.addUserForm = this._fb.group({
             name: [null, [Validators.required, Validators.minLength(2)]],
             lastName: [null, [Validators.required, Validators.minLength(2)]],
             gender: [true],
@@ -49,7 +49,7 @@ export class AddUserComponent implements OnInit {
     }
 
     // form validation
-    onValueChanged = this._formsService.processErrors.bind(this);
+    onValueChanged = this._fs.processErrors.bind(this);
 
     formErrors = {
         'name': '',

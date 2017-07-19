@@ -1,20 +1,20 @@
 import {Injectable} from '@angular/core';
 import {FormGroup} from "@angular/forms";
-import {Http, Headers} from '@angular/http';
+import {Http} from '@angular/http';
 
 @Injectable()
-export class FormsService {
+export class FormService {
 
     constructor (private _http: Http) {
 
     }
 
-    private formErrors: {};
+    private formErrors;
 
-    private errorMessages: {};
+    private errorMessages;
 
     getErrorMessages(slug) {
-        return this._http.get('/assets/data/form-error-messages.json').map(res => res.json()[slug]);
+        return this._http.get('data/form-error-messages.json').map(res => res.json()[slug]);
     }
 
     processErrors(form: FormGroup, data?: any) {
