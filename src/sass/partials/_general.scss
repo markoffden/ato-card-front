@@ -2,13 +2,52 @@
     General
  */
 
-// --- Navbar
-.navbar {
-    margin-bottom: 0;
+// --- Body
+body {
+    font-family: "Open Sans";
 }
 
 // --- Headers
 h1 {
+    font-weight: 900;
     text-align: center;
     margin-bottom: 25px;
+}
+
+// --- Navbar
+.navbar {
+    background-color: $accent-green;
+    border: none;
+    margin-bottom: 0;
+
+    .navbar-header {
+        a {
+            color: white;
+        }
+    }
+
+    .navbar-top-links {
+        font-size: 0;
+
+        li {
+            a {
+                color: white;
+                cursor: pointer;
+                font-size: 14px;
+
+                &:hover,
+                &:focus {
+                    color: $accent-green;
+                }
+            }
+        }
+
+        .dropdown-menu {
+            li {
+                a {
+                    color: $accent-green;
+                }
+            }
+        }
+    }
 }
