@@ -9,9 +9,13 @@ import {CardListComponent} from "./components/admin/cards/card-list/card-list.co
 import {AddCardComponent} from "./components/admin/cards/add-card/add-card.component";
 import {OutletListComponent} from "./components/admin/outlets/outlet-list/outlet-list.component";
 import {AddOutletComponent} from "./components/admin/outlets/add-outlet/add-outlet.component";
+import {SignInComponent} from "./components/sign-in/sign-in.component";
+import {SignUpComponent} from "./components/sign-up/sign-up.component";
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
+    { path: 'sign-in', component: SignInComponent },
+    { path: 'sign-up', component: SignUpComponent },
     { path: 'admin', component: AdminComponent, children: [
         { path: 'users', component: UserListComponent },
         { path: 'users/add-new', component: AddUserComponent },
