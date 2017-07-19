@@ -1,14 +1,30 @@
-// Global Styles
+/*
+    Admin
+ */
+
+//--- Global Styles
 
 body {
     background-color: $gray-lightest;
 }
 
-// Wrappers
+//--- Wrappers
 .page-wrapper {
     padding: 0 15px;
     min-height: 100vh; // TODO
     background-color: white;
+
+    .container {
+
+        @media screen and (min-width: 768px) {
+            padding: 0;
+            width: auto;
+        }
+
+        @media screen and (min-width: 992px) {
+            width: 680px;
+        }
+    }
 }
 
 @media screen and (min-width:768px) {
