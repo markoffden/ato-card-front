@@ -26,6 +26,7 @@ import {AuthService} from "./services/auth.service";
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import {ApiService} from "./services/api.service";
+import {AuthGuard} from "./shared/guard/auth.guard";
 
 @NgModule({
     declarations: [
@@ -50,7 +51,7 @@ import {ApiService} from "./services/api.service";
         routing,
         NgxMyDatePickerModule
     ],
-    providers: [Globals, ApiService, AuthService, FormService, UserService],
+    providers: [Globals, ApiService, AuthService, AuthGuard, FormService, UserService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

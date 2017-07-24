@@ -30,9 +30,13 @@ export class SignUpComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._fs.getErrorMessages('user').subscribe(res => {
-            this.errorMessages = res;
-        });
+        if (this._auth.isSignedIn()) {
+            this._router.navigate(['']);
+        } else {
+            this._fs.getErrorMessages('user').subscribe(res => {
+                this.errorMessages = res;
+            });
+        }
     }
 
     buildForm(): void {
@@ -74,8 +78,8 @@ export class SignUpComponent implements OnInit {
     signUp() {
         const values = this.signUpForm.value;
         this._api.post('sign-up', values)
-            .subscribe(data => {
-                this._auth.setToken(data.data.token);
+            .subscribe(res => {
+                this._auth.setToken(res.data.token);
                 this._router.navigate(['']);
             });
     }

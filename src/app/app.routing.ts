@@ -11,6 +11,7 @@ import {OutletListComponent} from "./components/admin/outlets/outlet-list/outlet
 import {AddOutletComponent} from "./components/admin/outlets/add-outlet/add-outlet.component";
 import {SignInComponent} from "./components/sign-in/sign-in.component";
 import {SignUpComponent} from "./components/sign-up/sign-up.component";
+import {AuthGuard} from './shared/guard/auth.guard';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },

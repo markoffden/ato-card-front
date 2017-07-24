@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 export class AuthService {
     storageKey: string = 'ato-card-jwt';
 
-    constructor (private _rtr: Router) {
+    constructor (private _router: Router) {
 
     }
 
@@ -23,6 +23,6 @@ export class AuthService {
 
     signOut() {
         localStorage.removeItem(this.storageKey);
-        this._rtr.navigate(['sign-in']);
+        this._router.navigate(['sign-in']);
     }
 }

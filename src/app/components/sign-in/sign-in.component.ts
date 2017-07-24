@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UserService} from "../../services/user.service";
 import {FormService} from "../../services/form.service";
+import {ApiService} from "../../services/api.service";
+import {AuthService} from "../../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'sign-in',
@@ -14,14 +17,23 @@ export class SignInComponent implements OnInit {
 
     errorMessages;
 
-    constructor(private _fb: FormBuilder, private _us: UserService, private _fs: FormService) {
+    constructor(private _api: ApiService,
+                private _auth: AuthService,
+                private _router: Router,
+                private _fb: FormBuilder,
+                private _us: UserService,
+                private _fs: FormService) {
         this.buildForm();
     }
 
     ngOnInit() {
-        this._fs.getErrorMessages('user').subscribe(res => {
-            this.errorMessages = res;
-        });
+        if (this._auth.isSignedIn()) {
+            this._router.navigate(['']);
+        } else {
+            this._fs.getErrorMessages('user').subscribe(res => {
+                this.errorMessages = res;
+            });
+        }
     }
 
     buildForm(): void {
@@ -44,19 +56,16 @@ export class SignInComponent implements OnInit {
     };
 
     onSubmit() {
-        if (this.signInForm.valid) {
-            this.addUser();
-        }
+        if (!this.signInForm.valid) return;
+        this.signIn();
     }
 
-    addUser() {
-        console.log(this.signInForm.value);
-        // var result: any;
-        // console.log(user);
-        // result = this._userService.saveUser(user);
-        // result.subscribe(x => {
-        //     console.log(x);
-        // });
+    signIn() {
+        const values = this.signInForm.value;
+        this._api.post('authenticate', values)
+            .subscribe(res => {
+                this._auth.setToken(res.data.token);
+                this._router.navigate(['']);
+            });
     }
 }
-

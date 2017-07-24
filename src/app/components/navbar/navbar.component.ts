@@ -9,15 +9,15 @@ import {AuthService} from '../../services/auth.service';
 export class NavbarComponent implements OnInit {
 
     constructor(private _auth: AuthService) {
-    }
 
-    isSignedIn: boolean = this._auth.isSignedIn();
+    }
 
     signOut() {
         this._auth.signOut();
     }
 
     ngOnInit() {
+
     }
 
 }
