@@ -22,8 +22,10 @@ import { AddCardComponent } from './components/admin/cards/add-card/add-card.com
 import { OutletListComponent } from './components/admin/outlets/outlet-list/outlet-list.component';
 import { AddOutletComponent } from './components/admin/outlets/add-outlet/add-outlet.component';
 import {FormService} from "./services/form.service";
+import {AuthService} from "./services/auth.service";
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import {ApiService} from "./services/api.service";
 
 @NgModule({
     declarations: [
@@ -48,7 +50,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
         routing,
         NgxMyDatePickerModule
     ],
-    providers: [Globals, UserService, FormService],
+    providers: [Globals, ApiService, AuthService, FormService, UserService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,8 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {UserService} from "../../services/user.service";
-import {CustomValidators} from "../../shared/custom-validators";
+import {ApiService} from '../../services/api.service';
+import {AuthService} from '../../services/auth.service';
 import {FormService} from "../../services/form.service";
+import {CustomValidators} from "../../shared/custom-validators";
+import {Router} from '@angular/router';
+
+import {Http} from '@angular/http';
 
 @Component({
     selector: 'sign-up',
@@ -15,7 +19,13 @@ export class SignUpComponent implements OnInit {
 
     errorMessages;
 
-    constructor(private _fb: FormBuilder, private _us: UserService, private _fs: FormService) {
+    constructor(private _api: ApiService,
+                private _auth: AuthService,
+                private _fb: FormBuilder,
+                private _fs: FormService,
+                private _router: Router,
+                private _http: Http) {
+
         this.buildForm();
     }
 
@@ -57,19 +67,16 @@ export class SignUpComponent implements OnInit {
     };
 
     onSubmit() {
-        if (this.signUpForm.valid) {
-            this.addUser();
-        }
+        if (!this.signUpForm.valid) return;
+        this.signUp();
     }
 
-    addUser() {
-        console.log(this.signUpForm.value);
-        // var result: any;
-        // console.log(user);
-        // result = this._userService.saveUser(user);
-        // result.subscribe(x => {
-        //     console.log(x);
-        // });
+    signUp() {
+        const values = this.signUpForm.value;
+        this._api.post('sign-up', values)
+            .subscribe(data => {
+                this._auth.setToken(data.data.token);
+                this._router.navigate(['']);
+            });
     }
 }
-
