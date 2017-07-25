@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Outlet} from "../../../../models/Outlet";
+import {OutletService} from "../../../../services/outlet.service";
 
 @Component({
   selector: 'app-outlet-list',
@@ -6,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OutletListComponent implements OnInit {
 
-  constructor() { }
+    constructor(private _os: OutletService) {
 
-  ngOnInit() {
-  }
+    }
 
+    outlets: Outlet[];
+
+    ngOnInit() {
+        this.outlets = [];
+        this._os.getOutlets().subscribe(res => {
+            this.outlets = res.data;
+        });
+    }
 }

@@ -7,6 +7,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {routing} from './app.routing';
 import {Globals} from './services/globals.service';
 import {UserService} from './services/user.service';
+import {CardService} from './services/card.service';
 
 import { NgxMyDatePickerModule } from 'ngx-mydatepicker';
 
@@ -28,6 +29,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import {ApiService} from "./services/api.service";
 import {AuthGuard} from "./shared/guard/auth.guard";
 import { UserListItemComponent } from './components/admin/users/user-list/user-list-item/user-list-item.component';
+import {OutletService} from "./services/outlet.service";
 
 @NgModule({
     declarations: [
@@ -53,7 +55,16 @@ import { UserListItemComponent } from './components/admin/users/user-list/user-l
         routing,
         NgxMyDatePickerModule
     ],
-    providers: [Globals, ApiService, AuthService, AuthGuard, FormService, UserService],
+    providers: [
+        Globals,
+        ApiService,
+        AuthService,
+        AuthGuard,
+        FormService,
+        UserService,
+        CardService,
+        OutletService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
