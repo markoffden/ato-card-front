@@ -9,15 +9,24 @@ import {UserService} from '../../../../services/user.service';
 
 export class UserListComponent implements OnInit {
 
-    constructor(private _userService: UserService) {
+    constructor(private _us: UserService) {
     }
 
     users: User[];
 
     ngOnInit() {
         this.users = [];
-        this._userService.getUsers().subscribe(users => {
-            this.users = users;
+        this._us.getUsers().subscribe(res => {
+            this.users = res.data;
         });
+    }
+
+    removeUser(id) {
+        let users = this.users;
+        for (let i = 0; i < users.length; i++) {
+            if (users[i]._id == id) {
+                users.splice(i, 1);
+            }
+        }
     }
 }

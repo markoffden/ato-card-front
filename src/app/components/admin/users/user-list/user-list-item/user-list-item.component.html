@@ -1,0 +1,14 @@
+<td>{{user.name}}</td>
+<td>{{user.lastName}}</td>
+<td>{{user.email}}</td>
+<td [ngSwitch]="user.role">
+    <span *ngSwitchCase="1">Користувач</span>
+    <span *ngSwitchCase="2">Власник карти</span>
+    <span *ngSwitchCase="3">Надавач знижки</span>
+    <span *ngSwitchCase="4">Адміністратор</span>
+</td>
+<td>{{user.address}}</td>
+<td>
+    <button><span class="fa fa-pencil text-warning"></span></button>
+    <button (click)="deleteUser(user._id)"><span class="fa fa-trash text-danger"></span></button>
+</td>

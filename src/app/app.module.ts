@@ -27,6 +27,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import {ApiService} from "./services/api.service";
 import {AuthGuard} from "./shared/guard/auth.guard";
+import { UserListItemComponent } from './components/admin/users/user-list/user-list-item/user-list-item.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import {AuthGuard} from "./shared/guard/auth.guard";
         OutletListComponent,
         AddOutletComponent,
         SignUpComponent,
-        SignInComponent
+        SignInComponent,
+        UserListItemComponent
     ],
     imports: [
         BrowserModule,

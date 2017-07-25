@@ -1,26 +1,33 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {ApiService} from './api.service';
 import 'rxjs/add/operator/map';
-
-import {Globals} from './globals.service';
 
 @Injectable()
 export class UserService {
-    constructor(private _http: Http, private _globals: Globals) {
+    constructor(private _api: ApiService) {
 
     }
 
     getUsers() {
-        return this._http.get(this._globals.API_URL + '/users').map(res => res.json());
+        return this._api.get('users');
     }
 
-    saveUser(user) {
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        console.log(JSON.stringify(user));
-        return this._http.post(this._globals.API_URL + '/users/add', JSON.stringify(user), {headers: headers})
+    addUser(user) {
+        return this._api.post('users', user);
+    }
+
+    deleteUser(id) {
+        return this._api.delete(`users/${id}`)
             .map(res => res.json());
     }
+
+    // saveUser(user) {
+    //     var headers = new Headers();
+    //     headers.append('Content-Type', 'application/json');
+    //     console.log(JSON.stringify(user));
+    //     return this._http.post(this._globals.API_URL + '/users/add', JSON.stringify(user), {headers: headers})
+    //         .map(res => res.json());
+    // }
 
     // updateUser(todo) {
     //     var headers = new Headers();
@@ -29,8 +36,4 @@ export class UserService {
     //         .map(res => res.json());
     // }
     //
-    // deleteUser(id) {
-    //     return this._http.delete('/api/v1/todo/' + id)
-    //         .map(res => res.json());
-    // }
 }

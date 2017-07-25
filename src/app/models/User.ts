@@ -1,5 +1,6 @@
 export class User {
 
+    _id: String;
     name: String;
     lastName: String;
     gender: Boolean;

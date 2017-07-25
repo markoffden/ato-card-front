@@ -33,7 +33,7 @@ export class ApiService {
 
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', `Bearer ${this._auth.getToken()}`);
+        headers.append('x-access-token', this._auth.getToken());
 
         const requestOptions = new RequestOptions({
             url: `${this.baseUrl}/${url}`,

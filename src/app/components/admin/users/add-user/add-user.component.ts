@@ -4,6 +4,7 @@ import {UserService} from "../../../../services/user.service";
 
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {FormService} from "../../../../services/form.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'add-user',
@@ -16,7 +17,10 @@ export class AddUserComponent implements OnInit {
 
     errorMessages;
 
-    constructor(private _fb: FormBuilder, private _us: UserService, private _fs: FormService) {
+    constructor(private _fb: FormBuilder,
+                private _us: UserService,
+                private _fs: FormService,
+                private _router: Router) {
         this.buildForm();
     }
 
@@ -66,12 +70,12 @@ export class AddUserComponent implements OnInit {
     }
 
     addUser() {
-        console.log(this.addUserForm.value);
-        // var result: any;
-        // console.log(user);
-        // result = this._userService.saveUser(user);
-        // result.subscribe(x => {
-        //     console.log(x);
-        // });
+        this._us.addUser(this.addUserForm.value).subscribe(res => {
+            if (res.error) {
+                console.log(res.error.message);
+            } else {
+                this._router.navigate(['admin/users']);
+            }
+        });
     }
 }
