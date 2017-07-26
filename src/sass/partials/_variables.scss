@@ -3,6 +3,14 @@
 */
 
 $accent-green: #636834;
+$accent-green-lighter: lighten($accent-green, 10%);
+$accent-green-darker: darken($accent-green, 10%);
+$accent-green-light: #919476;
+$accent-green-bg: #eff0eb;
+$accent-green-border: #c6c8b5;
+
+$quote-text: #3d3d3d;
+$quote-icon: #dedfd4;
 
 $gray-darker: lighten(#000, 13.5%);
 $gray-dark: lighten(#000, 20%);
@@ -15,3 +23,10 @@ $brand-success: #5cb85c;
 $brand-info: #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger: #d9534f;
+
+// ----- variables: breakpoints
+$portrait: 480px;
+$landscape: 680px;
+$tablet: 768px;
+$desktop: 992px;
+$wide: 1200px;
