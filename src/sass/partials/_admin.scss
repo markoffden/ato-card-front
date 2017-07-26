@@ -16,18 +16,18 @@ body {
 
     .container {
 
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: $tablet) {
             padding: 0;
             width: auto;
         }
 
-        @media screen and (min-width: 992px) {
+        @media screen and (min-width: $desktop) {
             width: 680px;
         }
     }
 }
 
-@media screen and (min-width:768px) {
+@media screen and (min-width: $tablet) {
     .page-wrapper {
         position: inherit;
         margin: 0 0 0 250px;

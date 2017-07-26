@@ -20,11 +20,11 @@ section {
     .card-promo {
         padding-top: 25px;
 
-        @media screen and (min-width: 768px) and (max-width: 991px) {
+        @media screen and (min-width: $tablet) and (max-width: $until-desktop) {
             padding-top: 0;
         }
 
-        @media screen and (min-width: 992px) {
+        @media screen and (min-width: $desktop) {
             padding-top: 5px;
         }
 
@@ -37,7 +37,7 @@ section {
                 p {
                     text-align: center;
 
-                    @media screen and (min-width: 768px) {
+                    @media screen and (min-width: $tablet) {
                         text-align: left;
                     }
                 }
@@ -51,7 +51,7 @@ section {
             margin: 0 auto;
             text-transform: uppercase;
 
-            @media screen and (min-width: 992px) {
+            @media screen and (min-width: $desktop) {
                 display: inline-block;
                 margin: 0;
             }
@@ -67,7 +67,7 @@ section {
         text-align: center;
         margin-bottom: 40px;
 
-        @media screen and (min-width: 992px){
+        @media screen and (min-width: $desktop){
             margin-bottom: 0;
         }
 
@@ -87,6 +87,7 @@ section {
 
 // --- Feedbacks
 .feedbacks {
+    padding-top: 100px;
 
     .carousel-control {
         background: none;
@@ -195,5 +196,26 @@ section {
 // --- Footer
 footer {
     background-color: $accent-green-darker;
-    min-height: 300px;
+    min-height: 250px;
+    padding: 50px 0;
+
+    .item {
+        color: #eee;
+
+        h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        address {
+            margin-bottom: 50px;
+        }
+
+        .copy {
+            font-size: 12px;
+            margin: 0;
+        }
+    }
 }
