@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {FormService} from "../../../../services/form.service";
+import {UserService} from "../../../../services/user.service";
+import {User} from '../../../../models/User';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
 @Component({
   selector: 'add-outlet',
@@ -11,13 +14,30 @@ export class AddOutletComponent implements OnInit {
 
     errorMessages;
 
-    constructor(private _fb: FormBuilder, private _fs: FormService) {
+    users: User[];
+
+    constructor(
+        private _fb: FormBuilder,
+        private _fs: FormService,
+        private _us: UserService,
+        private _ds: DomSanitizer) {
         this.buildForm();
     }
 
     ngOnInit() {
+
+        // get error messages
         this._fs.getErrorMessages('outlet').subscribe(res => {
             this.errorMessages = res;
+        });
+
+        // set users list
+        this.users = [];
+        this._us.getUsers().subscribe(res => {
+            res.data.forEach((elem) => {
+                elem.fullName = `${elem.name} ${elem.lastName}`;
+                this.users.push(elem);
+            });
         });
     }
 
@@ -62,5 +82,10 @@ export class AddOutletComponent implements OnInit {
         // result.subscribe(x => {
         //     console.log(x);
         // });
+    }
+
+    autocompleteListFormatter = (data: any) : SafeHtml => {
+        let html = `<span>${data.name} ${data.lastName}</span>`;
+        return this._ds.bypassSecurityTrustHtml(html);
     }
 }

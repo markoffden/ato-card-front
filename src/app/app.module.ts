@@ -31,6 +31,8 @@ import {AuthGuard} from "./shared/guard/auth.guard";
 import { UserListItemComponent } from './components/admin/users/user-list/user-list-item/user-list-item.component';
 import {OutletService} from "./services/outlet.service";
 
+import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -53,7 +55,8 @@ import {OutletService} from "./services/outlet.service";
         HttpModule,
         ReactiveFormsModule,
         routing,
-        NgxMyDatePickerModule
+        NgxMyDatePickerModule,
+        Ng2AutoCompleteModule
     ],
     providers: [
         Globals,

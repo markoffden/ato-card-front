@@ -36,7 +36,17 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="provider">Надавач</label>
-                    <input type="text" formControlName="provider" class="form-control" id="provider" placeholder="Надавач">
+                    <input ng2-auto-complete type="text"
+                           [source]="users"
+                           value-property-name="_id"
+                           [list-formatter]="autocompleteListFormatter"
+                           [max-num-list]="7"
+                           formControlName="provider"
+                           display-property-name="fullName"
+                           class="form-control"
+                           id="provider"
+                           placeholder="Надавач"
+                    >
                 </div>
             </div>
             <button [disabled]="!addOutletForm.valid" type="submit" class="btn btn-success pull-right">Додати заклад</button>
