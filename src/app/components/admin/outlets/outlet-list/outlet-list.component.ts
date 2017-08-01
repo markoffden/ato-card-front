@@ -20,4 +20,13 @@ export class OutletListComponent implements OnInit {
             this.outlets = res.data;
         });
     }
+
+    removeOutlet(id) {
+        let outlets = this.outlets;
+        for (let i = 0; i < outlets.length; i++) {
+            if (outlets[i]._id == id) {
+                outlets.splice(i, 1);
+            }
+        }
+    }
 }

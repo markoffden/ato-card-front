@@ -1,13 +1,13 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {User} from "../../../../../models/User";
+import {Outlet} from "../../../../../models/Outlet";
 
 @Component({
-    selector: '[user-list-item]',
-    templateUrl: 'user-list-item.component.html'
+  selector: '[outlet-list-item]',
+  templateUrl: 'outlet-list-item.component.html'
 })
-export class UserListItemComponent implements OnInit {
+export class OutletListItemComponent implements OnInit {
 
-    @Input() user: User;
+    @Input() outlet: Outlet;
 
     @Output() id: EventEmitter<string> = new EventEmitter<string>();
 
@@ -17,7 +17,7 @@ export class UserListItemComponent implements OnInit {
     ngOnInit() {
     }
 
-    deleteUser(id) {
+    deleteOutlet(id) {
         this.id.emit(id);
     }
 }

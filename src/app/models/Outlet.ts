@@ -1,5 +1,6 @@
 export class Outlet {
 
+    _id: String;
     name: String;
     discountType: String;
     address: String;

@@ -4,6 +4,8 @@ import {FormService} from "../../../../services/form.service";
 import {UserService} from "../../../../services/user.service";
 import {User} from '../../../../models/User';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import {OutletService} from "../../../../services/outlet.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'add-outlet',
@@ -19,7 +21,9 @@ export class AddOutletComponent implements OnInit {
     constructor(
         private _fb: FormBuilder,
         private _fs: FormService,
+        private _os: OutletService,
         private _us: UserService,
+        private _router: Router,
         private _ds: DomSanitizer) {
         this.buildForm();
     }
@@ -75,13 +79,15 @@ export class AddOutletComponent implements OnInit {
     }
 
     addOutlet() {
-        console.log(this.addOutletForm.value);
-        // var result: any;
-        // console.log(user);
-        // result = this._userService.saveUser(user);
-        // result.subscribe(x => {
-        //     console.log(x);
-        // });
+        let payload = this.addOutletForm.value;
+        payload.provider = payload.provider._id;
+        this._os.addOutlet(payload).subscribe(res => {
+            if (res.error) {
+                console.log(res.error.message);
+            } else {
+                this._router.navigate(['admin/outlets']);
+            }
+        });
     }
 
     autocompleteListFormatter = (data: any) : SafeHtml => {

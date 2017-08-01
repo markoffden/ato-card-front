@@ -10,12 +10,14 @@
                         <tr>
                             <th>Назва</th>
                             <th>Адреса</th>
+                            <th>Тип точки</th>
                             <th>Тип знижки</th>
                             <th>Надавач</th>
+                            <th>Дії</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <!-- <tr user-list-item *ngFor="let user of users" [user]="user" (id)="removeUser($event)"></tr> -->
+                        <tr outlet-list-item *ngFor="let outlet of outlets" [outlet]="outlet" (id)="removeOutlet($event)"></tr>
                     </tbody>
                 </table><!-- .table -->
             </div><!-- .panel-body -->
