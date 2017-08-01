@@ -7,10 +7,19 @@
                     <input type="text" formControlName="number" class="form-control" id="number" placeholder="Номер карти">
                     <small *ngIf="formErrors.number" class="form-control-response">{{formErrors.number}}</small>
                 </div>
-                <div [ngClass]="{'has-error': formErrors.holder}" class="form-group col-sm-6">
+                <div class="form-group col-sm-6">
                     <label for="holder">Власник</label>
-                    <input type="text" formControlName="holder" class="form-control" id="holder" placeholder="Власник">
-                    <small *ngIf="formErrors.holder" class="form-control-response">{{formErrors.holder}}</small>
+                    <input ng2-auto-complete type="text"
+                           [source]="users"
+                           value-property-name="_id"
+                           [list-formatter]="autocompleteListFormatter"
+                           [max-num-list]="7"
+                           formControlName="holder"
+                           display-property-name="fullName"
+                           class="form-control"
+                           id="holder"
+                           placeholder="Власник"
+                    >
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="dateIssued">Дата видачі</label>

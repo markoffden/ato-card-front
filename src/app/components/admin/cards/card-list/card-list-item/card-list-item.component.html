@@ -1,0 +1,12 @@
+<td>{{card.number}}</td>
+<td>{{card.dateIssued}}</td>
+<td [ngSwitch]="card.status">
+    <span *ngSwitchCase="1">Неактивна</span>
+    <span *ngSwitchCase="2">Активна / видана</span>
+    <span *ngSwitchCase="3">Загублена</span>
+</td>
+<td>{{card.holder}}</td>
+<td>
+    <button><span class="fa fa-pencil text-warning"></span></button>
+    <button (click)="deleteCard(card._id)"><span class="fa fa-trash text-danger"></span></button>
+</td>

@@ -12,10 +12,11 @@
                         <th>Дата видачі</th>
                         <th>Статус</th>
                         <th>Власник</th>
+                        <th>Дії</th>
                     </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr user-list-item *ngFor="let user of users" [user]="user" (id)="removeUser($event)"></tr> -->
+                         <tr card-list-item *ngFor="let card of cards" [card]="card" (id)="removeCard($event)"></tr>
                     </tbody>
                 </table><!-- .table -->
             </div><!-- .panel-body -->

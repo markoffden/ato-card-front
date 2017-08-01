@@ -33,6 +33,7 @@ import {OutletService} from "./services/outlet.service";
 
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
 import { OutletListItemComponent } from './components/admin/outlets/outlet-list/outlet-list-item/outlet-list-item.component';
+import { CardListItemComponent } from './components/admin/cards/card-list/card-list-item/card-list-item.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { OutletListItemComponent } from './components/admin/outlets/outlet-list/
         SignUpComponent,
         SignInComponent,
         UserListItemComponent,
-        OutletListItemComponent
+        OutletListItemComponent,
+        CardListItemComponent
     ],
     imports: [
         BrowserModule,

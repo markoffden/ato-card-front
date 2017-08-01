@@ -80,7 +80,7 @@ export class AddOutletComponent implements OnInit {
 
     addOutlet() {
         let payload = this.addOutletForm.value;
-        payload.provider = payload.provider._id;
+        payload.provider = payload.provider ? payload.provider._id : null;
         this._os.addOutlet(payload).subscribe(res => {
             if (res.error) {
                 console.log(res.error.message);

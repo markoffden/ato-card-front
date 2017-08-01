@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 import {FormService} from "../../../../services/form.service";
+import {UserService} from "../../../../services/user.service";
+import {User} from '../../../../models/User';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import {CardService} from "../../../../services/card.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'add-card',
@@ -11,6 +16,8 @@ import {FormService} from "../../../../services/form.service";
 export class AddCardComponent implements OnInit {
 
     errorMessages;
+
+    users: User[];
 
     datePickerOpts: INgxMyDpOptions = {
         dayLabels: {
@@ -40,13 +47,30 @@ export class AddCardComponent implements OnInit {
         dateFormat: 'dd.mm.yyyy'
     };
 
-    constructor(private _fb: FormBuilder, private _fs: FormService) {
+    constructor(
+        private _fb: FormBuilder,
+        private _fs: FormService,
+        private _cs: CardService,
+        private _us: UserService,
+        private _router: Router,
+        private _ds: DomSanitizer) {
         this.buildForm();
     }
 
     ngOnInit() {
+
+        // get error messages
         this._fs.getErrorMessages('card').subscribe(res => {
             this.errorMessages = res;
+        });
+
+        // set users list
+        this.users = [];
+        this._us.getUsers().subscribe(res => {
+            res.data.forEach((elem) => {
+                elem.fullName = `${elem.name} ${elem.lastName}`;
+                this.users.push(elem);
+            });
         });
     }
 
@@ -95,12 +119,20 @@ export class AddCardComponent implements OnInit {
     }
 
     addCard() {
-        console.log(this.addCardForm.value);
-        // var result: any;
-        // console.log(user);
-        // result = this._userService.saveUser(user);
-        // result.subscribe(x => {
-        //     console.log(x);
-        // });
+        let payload = this.addCardForm.value;
+        payload.holder = payload.holder ? payload.holder._id : null;
+        payload.dateIssued = payload.dateIssued ? payload.dateIssued.jsdate : null;
+        this._cs.addCard(payload).subscribe(res => {
+            if (res.error) {
+                console.log(res.error.message);
+            } else {
+                this._router.navigate(['admin/cards']);
+            }
+        });
+    }
+
+    autocompleteListFormatter = (data: any) : SafeHtml => {
+        let html = `<span>${data.name} ${data.lastName}</span>`;
+        return this._ds.bypassSecurityTrustHtml(html);
     }
 }

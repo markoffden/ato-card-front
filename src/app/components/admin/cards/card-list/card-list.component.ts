@@ -21,12 +21,12 @@ export class CardListComponent implements OnInit {
         });
     }
 
-    // removeUser(id) {
-    //     let users = this.users;
-    //     for (let i = 0; i < users.length; i++) {
-    //         if (users[i]._id == id) {
-    //             users.splice(i, 1);
-    //         }
-    //     }
-    // }
+    removeCard(id) {
+        let cards = this.cards;
+        for (let i = 0; i < cards.length; i++) {
+            if (cards[i]._id == id) {
+                cards.splice(i, 1);
+            }
+        }
+    }
 }

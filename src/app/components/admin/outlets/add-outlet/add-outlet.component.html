@@ -34,7 +34,7 @@
                         <option value="4">СТО</option>
                     </select>
                 </div>
-                <div class="form-group col-sm-6">
+                <div [ngClass]="{'has-error': formErrors.provider}" class="form-group col-sm-6">
                     <label for="provider">Надавач</label>
                     <input ng2-auto-complete type="text"
                            [source]="users"
@@ -47,6 +47,7 @@
                            id="provider"
                            placeholder="Надавач"
                     >
+                    <small *ngIf="formErrors.provider" class="form-control-response">{{formErrors.provider}}</small>
                 </div>
             </div>
             <button [disabled]="!addOutletForm.valid" type="submit" class="btn btn-success pull-right">Додати заклад</button>
