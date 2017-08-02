@@ -7,21 +7,19 @@ import {UserService} from "../../services/user.service";
 @Injectable()
 export class AdminGuard implements CanActivate {
 
-    isAdmin: boolean = false;
-
     constructor (private _auth: AuthService, private _us: UserService, private _router: Router) {
-        this._us.getCurrentUser().subscribe(res => {
-            this.isAdmin = res.data.role === 4;
-        });
+
     }
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-        if (this.isAdmin) {
-            return true;
-        } else {
-            this._router.navigate(['']);
-            return false;
-        }
+        return this._us.getCurrentUser().map(res => {
+            if (res.data.role === 4) {
+                return true;
+            } else {
+                this._router.navigate(['']);
+                return false;
+            }
+        });
     }
 }
