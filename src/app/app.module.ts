@@ -34,6 +34,8 @@ import {OutletService} from "./services/outlet.service";
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
 import { OutletListItemComponent } from './components/admin/outlets/outlet-list/outlet-list-item/outlet-list-item.component';
 import { CardListItemComponent } from './components/admin/cards/card-list/card-list-item/card-list-item.component';
+import {AdminGuard} from "./shared/guard/admin.guard";
+import {NoAuthGuard} from "./shared/guard/no-auth.guard";
 
 @NgModule({
     declarations: [
@@ -67,6 +69,8 @@ import { CardListItemComponent } from './components/admin/cards/card-list/card-l
         ApiService,
         AuthService,
         AuthGuard,
+        NoAuthGuard,
+        AdminGuard,
         FormService,
         UserService,
         CardService,

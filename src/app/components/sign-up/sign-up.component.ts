@@ -77,6 +77,7 @@ export class SignUpComponent implements OnInit {
 
     signUp() {
         const values = this.signUpForm.value;
+        console.log(values);
         this._api.post('sign-up', values)
             .subscribe(res => {
                 this._auth.setToken(res.data.token);

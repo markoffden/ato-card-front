@@ -12,12 +12,13 @@ import {AddOutletComponent} from "./components/admin/outlets/add-outlet/add-outl
 import {SignInComponent} from "./components/sign-in/sign-in.component";
 import {SignUpComponent} from "./components/sign-up/sign-up.component";
 import {AuthGuard} from './shared/guard/auth.guard';
+import {NoAuthGuard} from "./shared/guard/no-auth.guard";
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'sign-in', component: SignInComponent },
-    { path: 'sign-up', component: SignUpComponent },
-    { path: 'admin', component: AdminComponent, children: [
+    { path: 'sign-in', component: SignInComponent, canActivate: [NoAuthGuard] },
+    { path: 'sign-up', component: SignUpComponent, canActivate: [NoAuthGuard] },
+    { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children: [
         { path: 'users', component: UserListComponent },
         { path: 'users/add-new', component: AddUserComponent },
         { path: 'cards', component: CardListComponent },
