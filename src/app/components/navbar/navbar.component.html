@@ -12,10 +12,10 @@
 
     <ul class="nav navbar-top-links navbar-right">
         <li><a routerLink="">Додому</a></li>
-        <li><a routerLink="admin">Адмін</a></li>
-        <li *ngIf="!_auth.isSignedIn()"><a routerLink="sign-in">Увійти</a></li>
-        <li *ngIf="!_auth.isSignedIn()"><a routerLink="sign-up">Зареєструватися</a></li>
-        <li *ngIf="_auth.isSignedIn()" class="dropdown">
+        <li *ngIf="isAdmin"><a routerLink="admin">Адмін</a></li>
+        <li *ngIf="!isSignedIn"><a routerLink="sign-in">Увійти</a></li>
+        <li *ngIf="!isSignedIn"><a routerLink="sign-up">Зареєструватися</a></li>
+        <li *ngIf="isSignedIn" class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>

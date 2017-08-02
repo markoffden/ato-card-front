@@ -21,6 +21,10 @@ export class UserService {
             .map(res => res.json());
     }
 
+    getCurrentUser() {
+        return this._api.get('user');
+    }
+
     // saveUser(user) {
     //     var headers = new Headers();
     //     headers.append('Content-Type', 'application/json');
