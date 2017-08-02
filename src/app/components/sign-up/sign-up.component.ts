@@ -41,7 +41,7 @@ export class SignUpComponent implements OnInit {
 
     buildForm(): void {
         this.signUpForm = this._fb.group({
-            name: [null, [Validators.required, Validators.minLength(2)]],
+            firstName: [null, [Validators.required, Validators.minLength(2)]],
             lastName: [null, [Validators.required, Validators.minLength(2)]],
             gender: [true],
             email: [null, [Validators.email]],
@@ -63,7 +63,7 @@ export class SignUpComponent implements OnInit {
     onValueChanged = this._fs.processErrors.bind(this);
 
     formErrors = {
-        'name': '',
+        'firstName': '',
         'lastName': '',
         'email': '',
         'password': '',
@@ -77,7 +77,6 @@ export class SignUpComponent implements OnInit {
 
     signUp() {
         const values = this.signUpForm.value;
-        console.log(values);
         this._api.post('sign-up', values)
             .subscribe(res => {
                 this._auth.setToken(res.data.token);

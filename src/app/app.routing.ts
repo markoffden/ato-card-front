@@ -13,12 +13,13 @@ import {SignInComponent} from "./components/sign-in/sign-in.component";
 import {SignUpComponent} from "./components/sign-up/sign-up.component";
 import {AuthGuard} from './shared/guard/auth.guard';
 import {NoAuthGuard} from "./shared/guard/no-auth.guard";
+import {AdminGuard} from "./shared/guard/admin.guard";
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'sign-in', component: SignInComponent, canActivate: [NoAuthGuard] },
     { path: 'sign-up', component: SignUpComponent, canActivate: [NoAuthGuard] },
-    { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children: [
+    { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminGuard], children: [
         { path: 'users', component: UserListComponent },
         { path: 'users/add-new', component: AddUserComponent },
         { path: 'cards', component: CardListComponent },

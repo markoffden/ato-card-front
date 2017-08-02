@@ -32,7 +32,7 @@ export class AddUserComponent implements OnInit {
 
     buildForm(): void {
         this.addUserForm = this._fb.group({
-            name: [null, [Validators.required, Validators.minLength(2)]],
+            firstName: [null, [Validators.required, Validators.minLength(2)]],
             lastName: [null, [Validators.required, Validators.minLength(2)]],
             gender: [true],
             email: [null, [Validators.email]],
@@ -56,7 +56,7 @@ export class AddUserComponent implements OnInit {
     onValueChanged = this._fs.processErrors.bind(this);
 
     formErrors = {
-        'name': '',
+        'firstName': '',
         'lastName': '',
         'email': '',
         'password': '',

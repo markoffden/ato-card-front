@@ -3,14 +3,14 @@
     <div class="row">
         <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
             <div class="row">
-                <div [ngClass]="{'has-error': formErrors.name}" class="form-group col-sm-6">
-                    <label for="name">Ім'я</label>
-                    <input type="text" formControlName="name" class="form-control" id="name" placeholder="Ім'я">
-                    <small *ngIf="formErrors.name" class="form-control-response">{{formErrors.name}}</small>
+                <div [ngClass]="{'has-error': formErrors.firstName}" class="form-group col-sm-6">
+                    <label for="first-name">Ім'я</label>
+                    <input type="text" formControlName="firstName" class="form-control" id="first-name" placeholder="Ім'я">
+                    <small *ngIf="formErrors.firstName" class="form-control-response">{{formErrors.firstName}}</small>
                 </div>
                 <div [ngClass]="{'has-error': formErrors.lastName}" class="form-group col-sm-6">
-                    <label for="lastname">Прізвище</label>
-                    <input type="text" formControlName="lastName" class="form-control" id="lastname" placeholder="Прізвище">
+                    <label for="last-name">Прізвище</label>
+                    <input type="text" formControlName="lastName" class="form-control" id="last-name" placeholder="Прізвище">
                     <small *ngIf="formErrors.lastName" class="form-control-response">{{formErrors.lastName}}</small>
                 </div>
                 <div [ngClass]="{'has-error': formErrors.email}" class="form-group col-sm-6">

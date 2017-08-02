@@ -39,7 +39,7 @@ export class AddOutletComponent implements OnInit {
         this.users = [];
         this._us.getUsers().subscribe(res => {
             res.data.forEach((elem) => {
-                elem.fullName = `${elem.name} ${elem.lastName}`;
+                elem.fullName = `${elem.firstName} ${elem.lastName}`;
                 this.users.push(elem);
             });
         });
@@ -91,7 +91,7 @@ export class AddOutletComponent implements OnInit {
     }
 
     autocompleteListFormatter = (data: any) : SafeHtml => {
-        let html = `<span>${data.name} ${data.lastName}</span>`;
+        let html = `<span>${data.firstName} ${data.lastName}</span>`;
         return this._ds.bypassSecurityTrustHtml(html);
     }
 }
