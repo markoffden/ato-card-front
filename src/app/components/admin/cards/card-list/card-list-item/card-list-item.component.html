@@ -7,6 +7,6 @@
 </td>
 <td>{{card.holder}}</td>
 <td>
-    <button routerLink="/admin/cards/{{card._id}}"><span class="fa fa-pencil text-warning"></span></button>
+    <button [routerLink]="['/admin/cards', card._id]"><span class="fa fa-pencil text-warning"></span></button>
     <button (click)="deleteCard(card._id)"><span class="fa fa-trash text-danger"></span></button>
 </td>

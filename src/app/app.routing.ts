@@ -19,6 +19,7 @@ import {EditCardComponent} from "./components/admin/cards/edit-card/edit-card.co
 import {ForgotPasswordComponent} from "./components/forgot-password/forgot-password.component";
 import {UserProfileComponent} from "./components/user-profile/user-profile.component";
 import {UserSettingsComponent} from "./components/user-settings/user-settings.component";
+import {EditOutletComponent} from "./components/admin/outlets/edit-outlet/edit-outlet.component";
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
         { path: 'cards/:id', component: EditCardComponent },
         { path: 'outlets', component: OutletListComponent },
         { path: 'outlets/add-new', component: AddOutletComponent },
-        { path: 'outlets/:id', component: EditCardComponent }
+        { path: 'outlets/:id', component: EditOutletComponent }
     ]}
 ];
 
