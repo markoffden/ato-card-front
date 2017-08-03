@@ -82,6 +82,18 @@ export class EditCardComponent implements OnInit {
             this._cs.getCardById(params['id']).subscribe(
                 res => {
                     let card = res.data;
+                    if (card.dateIssued) {
+                        let date = new Date(card.dateIssued);
+                        this.editCardForm.patchValue({
+                            dateIssued: {
+                                date: {
+                                    year: date.getFullYear(),
+                                    month: date.getMonth() + 1,
+                                    day: date.getDate()
+                                }
+                            }
+                        });
+                    }
                     if (card.holder) {
                         this._us.getUserById(card.holder).subscribe(
                             data => {
@@ -100,7 +112,6 @@ export class EditCardComponent implements OnInit {
                     }
                     this.editCardForm.patchValue({
                         number: card.number || null,
-                        dateIssued: card.dateIssued || null,
                         status: card.status || 1
                     });
                 },
