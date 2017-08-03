@@ -9,6 +9,6 @@
 <td>{{outlet.discountType}}</td>
 <td>{{outlet.provider}}</td>
 <td>
-    <button><span class="fa fa-pencil text-warning"></span></button>
+    <button routerLink="/admin/outlets/{{outlet._id}}"><span class="fa fa-pencil text-warning"></span></button>
     <button (click)="deleteOutlet(outlet._id)"><span class="fa fa-trash text-danger"></span></button>
 </td>

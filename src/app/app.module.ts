@@ -36,6 +36,12 @@ import { OutletListItemComponent } from './components/admin/outlets/outlet-list/
 import { CardListItemComponent } from './components/admin/cards/card-list/card-list-item/card-list-item.component';
 import {AdminGuard} from "./shared/guard/admin.guard";
 import {NoAuthGuard} from "./shared/guard/no-auth.guard";
+import { EditUserComponent } from './components/admin/users/edit-user/edit-user.component';
+import { EditCardComponent } from './components/admin/cards/edit-card/edit-card.component';
+import { EditOutletComponent } from './components/admin/outlets/edit-outlet/edit-outlet.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +59,13 @@ import {NoAuthGuard} from "./shared/guard/no-auth.guard";
         SignInComponent,
         UserListItemComponent,
         OutletListItemComponent,
-        CardListItemComponent
+        CardListItemComponent,
+        EditUserComponent,
+        EditCardComponent,
+        EditOutletComponent,
+        UserProfileComponent,
+        UserSettingsComponent,
+        ForgotPasswordComponent
     ],
     imports: [
         BrowserModule,

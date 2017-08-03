@@ -9,6 +9,6 @@
 </td>
 <td>{{user.address}}</td>
 <td>
-    <button><span class="fa fa-pencil text-warning"></span></button>
+    <button routerLink="/admin/users/{{user._id}}"><span class="fa fa-pencil text-warning"></span></button>
     <button (click)="deleteUser(user._id)"><span class="fa fa-trash text-danger"></span></button>
 </td>

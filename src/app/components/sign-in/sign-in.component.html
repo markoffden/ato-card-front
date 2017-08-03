@@ -14,6 +14,7 @@
                     <small *ngIf="formErrors.password" class="form-control-response">{{formErrors.password}}</small>
                 </div>
             </div>
+            <a routerLink="/forgot-password">Забули пароль?</a>
             <button [disabled]="!signInForm.valid" type="submit" class="btn btn-success pull-right">Увійти</button>
         </form>
     </div>

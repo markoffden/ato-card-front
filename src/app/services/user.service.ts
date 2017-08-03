@@ -17,8 +17,7 @@ export class UserService {
     }
 
     deleteUser(id) {
-        return this._api.delete(`users/${id}`)
-            .map(res => res.json());
+        return this._api.delete(`users/${id}`);
     }
 
     getCurrentUser() {

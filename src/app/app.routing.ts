@@ -14,18 +14,29 @@ import {SignUpComponent} from "./components/sign-up/sign-up.component";
 import {AuthGuard} from './shared/guard/auth.guard';
 import {NoAuthGuard} from "./shared/guard/no-auth.guard";
 import {AdminGuard} from "./shared/guard/admin.guard";
+import {EditUserComponent} from "./components/admin/users/edit-user/edit-user.component";
+import {EditCardComponent} from "./components/admin/cards/edit-card/edit-card.component";
+import {ForgotPasswordComponent} from "./components/forgot-password/forgot-password.component";
+import {UserProfileComponent} from "./components/user-profile/user-profile.component";
+import {UserSettingsComponent} from "./components/user-settings/user-settings.component";
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'sign-in', component: SignInComponent, canActivate: [NoAuthGuard] },
+    { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [NoAuthGuard] },
     { path: 'sign-up', component: SignUpComponent, canActivate: [NoAuthGuard] },
+    { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
+    { path: 'user-settings', component: UserSettingsComponent, canActivate: [AuthGuard] },
     { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminGuard], children: [
         { path: 'users', component: UserListComponent },
         { path: 'users/add-new', component: AddUserComponent },
+        { path: 'users/:id', component: EditUserComponent },
         { path: 'cards', component: CardListComponent },
         { path: 'cards/add-new', component: AddCardComponent },
+        { path: 'cards/:id', component: EditCardComponent },
         { path: 'outlets', component: OutletListComponent },
-        { path: 'outlets/add-new', component: AddOutletComponent }
+        { path: 'outlets/add-new', component: AddOutletComponent },
+        { path: 'outlets/:id', component: EditCardComponent }
     ]}
 ];
 

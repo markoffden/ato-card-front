@@ -22,11 +22,17 @@ export class UserListComponent implements OnInit {
     }
 
     removeUser(id) {
-        let users = this.users;
-        for (let i = 0; i < users.length; i++) {
-            if (users[i]._id == id) {
-                users.splice(i, 1);
-            }
-        }
+        this._us.deleteUser(id).subscribe(
+            result => {
+                let users = this.users;
+                for (let i = 0; i < users.length; i++) {
+                    if (users[i]._id == id) {
+                        users.splice(i, 1);
+                    }
+                }
+            },
+            error => {
+                console.log(error.message);
+        });
     }
 }
