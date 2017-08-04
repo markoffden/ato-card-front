@@ -160,7 +160,6 @@ export class EditCardComponent implements OnInit {
             error => {
                 console.log(error.message);
             }
-
         );
     }
 

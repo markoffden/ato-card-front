@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import 'rxjs/add/operator/map';
+import {Observable} from "rxjs";
 
 @Injectable()
 export class OutletService {
@@ -16,25 +17,15 @@ export class OutletService {
         return this._api.post('outlets', outlet);
     }
 
-    //
-    // deleteUser(id) {
-    //     return this._api.delete(`users/${id}`)
-    //         .map(res => res.json());
-    // }
+    getOutletById(id): Observable<any> {
+        return this._api.get(`outlets/${id}`);
+    }
 
-    // saveUser(user) {
-    //     var headers = new Headers();
-    //     headers.append('Content-Type', 'application/json');
-    //     console.log(JSON.stringify(user));
-    //     return this._http.post(this._globals.API_URL + '/users/add', JSON.stringify(user), {headers: headers})
-    //         .map(res => res.json());
-    // }
+    updateOutlet(id, outlet): Observable<any> {
+        return this._api.patch(`outlets/${id}`, outlet);
+    }
 
-    // updateUser(todo) {
-    //     var headers = new Headers();
-    //     headers.append('Content-Type', 'application/json');
-    //     return this._http.put('/api/v1/todo/' + todo._id, JSON.stringify(todo), {headers: headers})
-    //         .map(res => res.json());
-    // }
-    //
+    deleteOutlet(id): Observable<any> {
+        return this._api.delete(`outlets/${id}`);
+    }
 }

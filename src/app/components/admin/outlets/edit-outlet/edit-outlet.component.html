@@ -1,1 +1,57 @@
 <h1>Оновити дані про точку</h1>
+<div class="container">
+    <div class="row">
+        <form [formGroup]="editOutletForm" (ngSubmit)="onSubmit()" class="col-md-10 col-md-offset-1">
+            <div class="row">
+                <div [ngClass]="{'has-error': formErrors.name}" class="form-group col-sm-6">
+                    <label for="name">Назва</label>
+                    <input type="text" formControlName="name" class="form-control" id="name" placeholder="Назва">
+                    <small *ngIf="formErrors.name" class="form-control-response">{{formErrors.name}}</small>
+                </div>
+                <div [ngClass]="{'has-error': formErrors.discountType}" class="form-group col-sm-6">
+                    <label for="discount-type">Тип знижки</label>
+                    <input type="text" formControlName="discountType" class="form-control" id="discount-type" placeholder="Тип знижки">
+                    <small *ngIf="formErrors.discountType" class="form-control-response">{{formErrors.discountType}}</small>
+                </div>
+                <div [ngClass]="{'has-error': formErrors.address}" class="form-group col-sm-12">
+                    <label for="address">Адреса</label>
+                    <input type="text" formControlName="address" class="form-control" id="address" placeholder="Адреса">
+                    <small *ngIf="formErrors.address" class="form-control-response">{{formErrors.address}}</small>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="longitude">Довгота</label>
+                    <input type="text" formControlName="longitude" class="form-control" id="longitude" placeholder="Довгота">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="latitude">Широта</label>
+                    <input type="text" formControlName="latitude" class="form-control" id="latitude" placeholder="Широта">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>Тип закладу</label>
+                    <select class="form-control" formControlName="type">
+                        <option value="1">Торгова точка</option>
+                        <option value="2">Сервісний центр</option>
+                        <option value="3">Перукарня</option>
+                        <option value="4">СТО</option>
+                    </select>
+                </div>
+                <div [ngClass]="{'has-error': formErrors.provider}" class="form-group col-sm-6">
+                    <label for="provider">Надавач</label>
+                    <input ng2-auto-complete type="text"
+                           [source]="users"
+                           value-property-name="_id"
+                           [list-formatter]="autocompleteListFormatter"
+                           [max-num-list]="7"
+                           formControlName="provider"
+                           display-property-name="fullName"
+                           class="form-control"
+                           id="provider"
+                           placeholder="Надавач"
+                    >
+                    <small *ngIf="formErrors.provider" class="form-control-response">{{formErrors.provider}}</small>
+                </div>
+            </div>
+            <button [disabled]="!editOutletForm.valid" type="submit" class="btn btn-success pull-right">Додати заклад</button>
+        </form>
+    </div>
+</div>

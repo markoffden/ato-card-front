@@ -22,11 +22,18 @@ export class CardListComponent implements OnInit {
     }
 
     removeCard(id) {
-        let cards = this.cards;
-        for (let i = 0; i < cards.length; i++) {
-            if (cards[i]._id == id) {
-                cards.splice(i, 1);
+        this._cs.deleteCard(id).subscribe(
+            result => {
+                let cards = this.cards;
+                for (let i = 0; i < cards.length; i++) {
+                    if (cards[i]._id == id) {
+                        cards.splice(i, 1);
+                    }
+                }
+            },
+            error => {
+                console.log(error.message);
             }
-        }
+        );
     }
 }

@@ -22,11 +22,18 @@ export class OutletListComponent implements OnInit {
     }
 
     removeOutlet(id) {
-        let outlets = this.outlets;
-        for (let i = 0; i < outlets.length; i++) {
-            if (outlets[i]._id == id) {
-                outlets.splice(i, 1);
+        this._os.deleteOutlet(id).subscribe(
+            result => {
+                let outlets = this.outlets;
+                for (let i = 0; i < outlets.length; i++) {
+                    if (outlets[i]._id == id) {
+                        outlets.splice(i, 1);
+                    }
+                }
+            },
+            error => {
+                console.log(error.message);
             }
-        }
+        );
     }
 }
