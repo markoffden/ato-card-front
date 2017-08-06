@@ -1,6 +1,13 @@
-import {FormGroup} from "@angular/forms";
+import {FormGroup, AbstractControl} from "@angular/forms";
 
 export class CustomValidators {
+
+    static required() {
+        return (control: AbstractControl): {[key: string]: any} => {
+            return !control.value || control.value.length > 1 && control.value.trim() === '' ?
+                {'required': true} : null;
+        }
+    }
 
     static matchValue(matchControlName: string, matchAgainstControlName: string) {
         return (control: FormGroup) => {
