@@ -40,7 +40,8 @@
                     </select>
                 </div>
             </div>
-            <button [disabled]="!editCardForm.valid" type="submit" class="btn btn-success pull-right">Додати карту</button>
+            <button [disabled]="!editCardForm.valid" type="submit" class="btn btn-success pull-right">Зберегти</button>
+            <button routerLink="/admin/cards" class="btn btn-danger pull-right">Скасувати</button>
         </form>
     </div>
 </div>

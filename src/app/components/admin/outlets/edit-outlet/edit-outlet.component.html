@@ -51,7 +51,8 @@
                     <small *ngIf="formErrors.provider" class="form-control-response">{{formErrors.provider}}</small>
                 </div>
             </div>
-            <button [disabled]="!editOutletForm.valid" type="submit" class="btn btn-success pull-right">Додати заклад</button>
+            <button [disabled]="!editOutletForm.valid" type="submit" class="btn btn-success pull-right">Зберегти</button>
+            <button routerLink="/admin/outlets" class="btn btn-danger pull-right">Скасувати</button>
         </form>
     </div>
 </div>

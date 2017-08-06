@@ -4,7 +4,12 @@
 
 // --- Body
 body {
-    font-family: "Open Sans";
+    font-family: "Open Sans", Helvetica, sans-serif;
+}
+
+// --- Page Wrapper (not admin)
+.page-content-wrapper {
+    padding-top: 50px;
 }
 
 // --- Images
@@ -20,6 +25,12 @@ h1 {
     margin-bottom: 60px;
 }
 
+h3 {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
 // --- Lists
 ul {
     list-style: none;
@@ -27,6 +38,10 @@ ul {
 }
 
 // --- Buttons
+.btn {
+    margin-left: 10px;
+}
+
 .btn-accent {
     background-color: $accent-green-lighter;
     color: white;

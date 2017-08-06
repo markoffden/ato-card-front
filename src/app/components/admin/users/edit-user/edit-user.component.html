@@ -72,7 +72,8 @@
                     </div>
                 </div>
             </div>
-            <button [disabled]="!editUserForm.valid" type="submit" class="btn btn-success pull-right">Додати користувача</button>
+            <button [disabled]="!editUserForm.valid" type="submit" class="btn btn-success pull-right">Зберегти</button>
+            <button routerLink="/admin/users" class="btn btn-danger pull-right">Скасувати</button>
         </form>
     </div>
 </div>

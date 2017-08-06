@@ -65,7 +65,7 @@ export class EditUserComponent implements OnInit {
             firstName: [null, [Validators.required, Validators.minLength(2)]],
             lastName: [null, [Validators.required, Validators.minLength(2)]],
             gender: [true],
-            email: [null, [Validators.email]],
+            email: [{value: null, disabled: true}, [Validators.email]],
             address: [null],
             phone: [null],
             // password: [null, [Validators.required, Validators.minLength(8)]],

@@ -31,4 +31,26 @@ export class UserService {
     deleteUser(id): Observable<any> {
         return this._api.delete(`users/${id}`);
     }
+
+    switchGender(gender) {
+        return gender ? 'Чоловіча' : 'Жіноча';
+    }
+
+    switchActivated(activated) {
+        return activated ? 'Так' : 'Ні';
+    }
+
+    switchRole(role) {
+        switch (role) {
+            case 1:
+            default:
+                return 'Користувач';
+            case 2:
+                return 'Власник карти';
+            case 3:
+                return 'Надавач знижки';
+            case 4:
+                return 'Адміністратор';
+        }
+    }
 }

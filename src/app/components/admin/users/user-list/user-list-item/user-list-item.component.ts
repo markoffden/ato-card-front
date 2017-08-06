@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {User} from "../../../../../models/User";
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
     selector: '[user-list-item]',
@@ -11,10 +12,11 @@ export class UserListItemComponent implements OnInit {
 
     @Output() id: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor() {
+    constructor(private _us: UserService) {
     }
 
     ngOnInit() {
+        this.user.role = this._us.switchRole(this.user.role);
     }
 
     deleteUser(id) {

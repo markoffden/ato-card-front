@@ -9,10 +9,17 @@ body {
 }
 
 // --- Wrappers
-.page-wrapper {
+.admin-content-wrapper {
     padding: 0 15px;
     min-height: 100vh; // TODO
     background-color: white;
+
+    @media screen and (min-width: $tablet) {
+        position: inherit;
+        margin: 0 0 0 250px;
+        padding: 30px;
+        border-left: 1px solid darken($gray-lightest, 6.5%);
+    }
 
     .container {
 
@@ -24,15 +31,6 @@ body {
         @media screen and (min-width: $desktop) {
             width: 680px;
         }
-    }
-}
-
-@media screen and (min-width: $tablet) {
-    .page-wrapper {
-        position: inherit;
-        margin: 0 0 0 250px;
-        padding: 30px;
-        border-left: 1px solid darken($gray-lightest, 6.5%);
     }
 }
 
