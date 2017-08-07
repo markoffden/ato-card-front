@@ -45,6 +45,8 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { SwitchUserRolePipe } from './shared/pipes/switch-user-role.pipe';
 import { SwitchUserGenderPipe } from './shared/pipes/switch-user-gender.pipe';
 import { SwitchUserActivatedPipe } from './shared/pipes/switch-user-activated.pipe';
+import { SwitchCardStatusPipe } from './shared/pipes/switch-card-status.pipe';
+import { SwitchOutletTypePipe } from './shared/pipes/switch-outlet-type.pipe';
 
 @NgModule({
     declarations: [
@@ -71,7 +73,9 @@ import { SwitchUserActivatedPipe } from './shared/pipes/switch-user-activated.pi
         ForgotPasswordComponent,
         SwitchUserRolePipe,
         SwitchUserGenderPipe,
-        SwitchUserActivatedPipe
+        SwitchUserActivatedPipe,
+        SwitchCardStatusPipe,
+        SwitchOutletTypePipe
     ],
     imports: [
         BrowserModule,

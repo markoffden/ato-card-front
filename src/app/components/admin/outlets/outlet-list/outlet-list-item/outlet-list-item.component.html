@@ -1,11 +1,6 @@
 <td>{{outlet.name}}</td>
 <td>{{outlet.address}}</td>
-<td [ngSwitch]="outlet.type">
-    <span *ngSwitchCase="1">Торгова точка</span>
-    <span *ngSwitchCase="2">Сервісний центр</span>
-    <span *ngSwitchCase="3">Перукарня</span>
-    <span *ngSwitchCase="4">СТО</span>
-</td>
+<td>{{outlet.type | switchOutletType}}</td>
 <td>{{outlet.discountType}}</td>
 <td>{{outlet.provider}}</td>
 <td>

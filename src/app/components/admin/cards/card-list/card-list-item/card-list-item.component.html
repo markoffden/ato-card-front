@@ -1,10 +1,6 @@
 <td>{{card.number}}</td>
 <td>{{card.dateIssued | date:'dd.MM.yyyy'}}</td>
-<td [ngSwitch]="card.status">
-    <span *ngSwitchCase="1">Неактивна</span>
-    <span *ngSwitchCase="2">Активна / видана</span>
-    <span *ngSwitchCase="3">Загублена</span>
-</td>
+<td>{{card.status | switchCardStatus}}</td>
 <td>{{card.holder}}</td>
 <td>
     <button [routerLink]="['/admin/cards', card._id]"><span class="fa fa-pencil text-warning"></span></button>
