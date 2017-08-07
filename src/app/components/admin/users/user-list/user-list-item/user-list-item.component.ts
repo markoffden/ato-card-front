@@ -16,7 +16,7 @@ export class UserListItemComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.user.role = this._us.switchRole(this.user.role);
+
     }
 
     deleteUser(id) {

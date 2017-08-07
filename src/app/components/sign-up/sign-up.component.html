@@ -1,58 +1,60 @@
-<div class="container">
-    <h1>Реєстрація</h1>
-    <div class="row">
-        <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-            <div class="row">
-                <div [ngClass]="{'has-error': formErrors.firstName}" class="form-group col-sm-6">
-                    <label for="first-name">Ім'я</label>
-                    <input type="text" formControlName="firstName" class="form-control" id="first-name" placeholder="Ім'я">
-                    <small *ngIf="formErrors.firstName" class="form-control-response">{{formErrors.firstName}}</small>
-                </div>
-                <div [ngClass]="{'has-error': formErrors.lastName}" class="form-group col-sm-6">
-                    <label for="last-name">Прізвище</label>
-                    <input type="text" formControlName="lastName" class="form-control" id="last-name" placeholder="Прізвище">
-                    <small *ngIf="formErrors.lastName" class="form-control-response">{{formErrors.lastName}}</small>
-                </div>
-                <div [ngClass]="{'has-error': formErrors.email}" class="form-group col-sm-6">
-                    <label for="email">Email</label>
-                    <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email">
-                    <small *ngIf="formErrors.email" class="form-control-response">{{formErrors.email}}</small>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label>Стать</label>
-                    <div>
-                        <label class="radio-inline">
-                            <input type="radio" formControlName="gender" [value]="true"> Чол
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" formControlName="gender" [value]="false"> Жін
-                        </label>
+<div class="page-content-wrapper">
+    <div class="container">
+        <h1>Реєстрація</h1>
+        <div class="row">
+            <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+                <div class="row">
+                    <div [ngClass]="{'has-error': formErrors.firstName}" class="form-group col-sm-6">
+                        <label for="first-name">Ім'я</label>
+                        <input type="text" formControlName="firstName" class="form-control" id="first-name" placeholder="Ім'я">
+                        <small *ngIf="formErrors.firstName" class="form-control-response">{{formErrors.firstName}}</small>
+                    </div>
+                    <div [ngClass]="{'has-error': formErrors.lastName}" class="form-group col-sm-6">
+                        <label for="last-name">Прізвище</label>
+                        <input type="text" formControlName="lastName" class="form-control" id="last-name" placeholder="Прізвище">
+                        <small *ngIf="formErrors.lastName" class="form-control-response">{{formErrors.lastName}}</small>
+                    </div>
+                    <div [ngClass]="{'has-error': formErrors.email}" class="form-group col-sm-6">
+                        <label for="email">Email</label>
+                        <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email">
+                        <small *ngIf="formErrors.email" class="form-control-response">{{formErrors.email}}</small>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label>Стать</label>
+                        <div>
+                            <label class="radio-inline">
+                                <input type="radio" formControlName="gender" [value]="true"> Чол
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" formControlName="gender" [value]="false"> Жін
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="address">Адреса</label>
+                        <input type="text" formControlName="address" class="form-control" id="address" placeholder="Адреса">
+                    </div>
+                    <div [ngClass]="{'has-error': formErrors.password}" class="form-group col-sm-6">
+                        <label for="password">Пароль</label>
+                        <input type="password" formControlName="password" class="form-control" id="password" placeholder="Пароль">
+                        <small *ngIf="formErrors.password" class="form-control-response">{{formErrors.password}}</small>
+                    </div>
+                    <div [ngClass]="{'has-error': formErrors.confirmPassword}" class="form-group col-sm-6">
+                        <label for="confirm-password">Підтвердження паролю</label>
+                        <input type="password" formControlName="confirmPassword" class="form-control" id="confirm-password" placeholder="Підтвердження паролю">
+                        <small *ngIf="formErrors.confirmPassword" class="form-control-response">{{formErrors.confirmPassword}}</small>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="phone">Телефон</label>
+                        <input type="text" formControlName="phone" class="form-control" id="phone" placeholder="Телефон">
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="avatar">Аватар</label>
+                        <input type="text" formControlName="avatarUrl" class="form-control" id="avatar" placeholder="Аватар">
                     </div>
                 </div>
-                <div class="form-group col-sm-12">
-                    <label for="address">Адреса</label>
-                    <input type="text" formControlName="address" class="form-control" id="address" placeholder="Адреса">
-                </div>
-                <div [ngClass]="{'has-error': formErrors.password}" class="form-group col-sm-6">
-                    <label for="password">Пароль</label>
-                    <input type="password" formControlName="password" class="form-control" id="password" placeholder="Пароль">
-                    <small *ngIf="formErrors.password" class="form-control-response">{{formErrors.password}}</small>
-                </div>
-                <div [ngClass]="{'has-error': formErrors.confirmPassword}" class="form-group col-sm-6">
-                    <label for="confirm-password">Підтвердження паролю</label>
-                    <input type="password" formControlName="confirmPassword" class="form-control" id="confirm-password" placeholder="Підтвердження паролю">
-                    <small *ngIf="formErrors.confirmPassword" class="form-control-response">{{formErrors.confirmPassword}}</small>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label for="phone">Телефон</label>
-                    <input type="text" formControlName="phone" class="form-control" id="phone" placeholder="Телефон">
-                </div>
-                <div class="form-group col-sm-6">
-                    <label for="avatar">Аватар</label>
-                    <input type="text" formControlName="avatarUrl" class="form-control" id="avatar" placeholder="Аватар">
-                </div>
-            </div>
-            <button [disabled]="!signUpForm.valid" type="submit" class="btn btn-success pull-right">Зареєструватися</button>
-        </form>
+                <button [disabled]="!signUpForm.valid" type="submit" class="btn btn-success pull-right">Зареєструватися</button>
+            </form>
+        </div>
     </div>
 </div>

@@ -11,9 +11,9 @@ import {OutletListComponent} from "./components/admin/outlets/outlet-list/outlet
 import {AddOutletComponent} from "./components/admin/outlets/add-outlet/add-outlet.component";
 import {SignInComponent} from "./components/sign-in/sign-in.component";
 import {SignUpComponent} from "./components/sign-up/sign-up.component";
-import {AuthGuard} from './shared/guard/auth.guard';
-import {NoAuthGuard} from "./shared/guard/no-auth.guard";
-import {AdminGuard} from "./shared/guard/admin.guard";
+import {AuthGuard} from './shared/guards/auth.guard';
+import {NoAuthGuard} from "./shared/guards/no-auth.guard";
+import {AdminGuard} from "./shared/guards/admin.guard";
 import {EditUserComponent} from "./components/admin/users/edit-user/edit-user.component";
 import {EditCardComponent} from "./components/admin/cards/edit-card/edit-card.component";
 import {ForgotPasswordComponent} from "./components/forgot-password/forgot-password.component";

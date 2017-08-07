@@ -11,7 +11,7 @@
                 <h3>Прізвище</h3>
                 <p>{{user.lastName || 'n/a'}}</p>
                 <h3>Стать</h3>
-                <p>{{user.gender || 'n/a'}}</p>
+                <p>{{user.gender | switchUserGender}}</p>
                 <h3>Email</h3>
                 <p>{{user.email || 'n/a'}}</p>
                 <h3>Адреса</h3>
@@ -19,9 +19,9 @@
                 <h3>Телефон</h3>
                 <p>{{user.phone || 'n/a'}}</p>
                 <h3>Роль</h3>
-                <p>{{user.role || 'n/a'}}</p>
+                <p>{{user.role | switchUserRole}}</p>
                 <h3>Активовано</h3>
-                <p>{{user.activated || 'n/a'}}</p>
+                <p>{{user.activated | switchUserActivated}}</p>
                 <button routerLink="/user-settings" class="btn btn-warning pull-right">
                     <span class="fa fa-pencil"></span> Редагувати
                 </button>

@@ -1,5 +1,5 @@
 <td>{{card.number}}</td>
-<td>{{card.dateIssued}}</td>
+<td>{{card.dateIssued | date:'dd.MM.yyyy'}}</td>
 <td [ngSwitch]="card.status">
     <span *ngSwitchCase="1">Неактивна</span>
     <span *ngSwitchCase="2">Активна / видана</span>

@@ -18,9 +18,6 @@ export class UserProfileComponent implements OnInit {
         this._us.getCurrentUser().subscribe(
             res => {
                 this.user = res.data;
-                this.user.gender = this._us.switchGender(this.user.gender);
-                this.user.role = this._us.switchRole(this.user.role);
-                this.user.activated = this._us.switchActivated(this.user.activated);
             },
             error => {
                 console.log(error.message);

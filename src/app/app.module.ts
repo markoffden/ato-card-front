@@ -27,21 +27,24 @@ import {AuthService} from "./services/auth.service";
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import {ApiService} from "./services/api.service";
-import {AuthGuard} from "./shared/guard/auth.guard";
+import {AuthGuard} from "./shared/guards/auth.guard";
 import { UserListItemComponent } from './components/admin/users/user-list/user-list-item/user-list-item.component';
 import {OutletService} from "./services/outlet.service";
 
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
 import { OutletListItemComponent } from './components/admin/outlets/outlet-list/outlet-list-item/outlet-list-item.component';
 import { CardListItemComponent } from './components/admin/cards/card-list/card-list-item/card-list-item.component';
-import {AdminGuard} from "./shared/guard/admin.guard";
-import {NoAuthGuard} from "./shared/guard/no-auth.guard";
+import {AdminGuard} from "./shared/guards/admin.guard";
+import {NoAuthGuard} from "./shared/guards/no-auth.guard";
 import { EditUserComponent } from './components/admin/users/edit-user/edit-user.component';
 import { EditCardComponent } from './components/admin/cards/edit-card/edit-card.component';
 import { EditOutletComponent } from './components/admin/outlets/edit-outlet/edit-outlet.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { SwitchUserRolePipe } from './shared/pipes/switch-user-role.pipe';
+import { SwitchUserGenderPipe } from './shared/pipes/switch-user-gender.pipe';
+import { SwitchUserActivatedPipe } from './shared/pipes/switch-user-activated.pipe';
 
 @NgModule({
     declarations: [
@@ -65,7 +68,10 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
         EditOutletComponent,
         UserProfileComponent,
         UserSettingsComponent,
-        ForgotPasswordComponent
+        ForgotPasswordComponent,
+        SwitchUserRolePipe,
+        SwitchUserGenderPipe,
+        SwitchUserActivatedPipe
     ],
     imports: [
         BrowserModule,
