@@ -1,25 +1,19 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {User} from "../../../../../models/User";
-import {UserService} from "../../../../../services/user.service";
+import {ModalService} from "../../../../../services/modal.service";
 
 @Component({
     selector: '[user-list-item]',
     templateUrl: 'user-list-item.component.html'
 })
-export class UserListItemComponent implements OnInit {
+export class UserListItemComponent {
 
     @Input() user: User;
 
-    @Output() id: EventEmitter<string> = new EventEmitter<string>();
-
-    constructor(private _us: UserService) {
-    }
-
-    ngOnInit() {
-
+    constructor(private _ms: ModalService) {
     }
 
     deleteUser(id) {
-        this.id.emit(id);
+        this._ms.createConfirm('deleteUser', id);
     }
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UserService} from "../../services/user.service";
 
@@ -7,13 +7,14 @@ import {FormService} from "../../services/form.service";
 import {Router, ActivatedRoute} from "@angular/router";
 import {User} from "../../models/User";
 import {error} from "selenium-webdriver";
+import {ErrorService} from "../../services/error.service";
 
 @Component({
     selector: 'user-settings',
     templateUrl: 'user-settings.component.html'
 })
 
-export class UserSettingsComponent implements OnInit {
+export class UserSettingsComponent implements OnInit, OnDestroy {
 
     editUserForm: FormGroup;
 
@@ -21,20 +22,27 @@ export class UserSettingsComponent implements OnInit {
 
     user: User;
 
+    aliveSubscriptions: boolean;
+
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
                 private _fs: FormService,
-                private _router: Router,
-                private _ar: ActivatedRoute) {
+                private _es: ErrorService) {
+        this.aliveSubscriptions = true;
         this.buildForm();
     }
 
     ngOnInit() {
-        this._fs.getErrorMessages('user').subscribe(res => {
-            this.errorMessages = res;
-        });
+        this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(
+            res => {
+                this.errorMessages = res;
+            },
+            error => {
+                this._es.handleErrorRes(error);
+            }
+        );
 
-        this._us.getCurrentUser().subscribe(
+        this._us.getCurrentUser().takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 this.user = res.data;
                 let user = res.data;
@@ -53,7 +61,7 @@ export class UserSettingsComponent implements OnInit {
                 });
             },
             error => {
-                console.log(error.message);
+                this._es.handleErrorRes(error);
             }
         );
     }
@@ -77,7 +85,7 @@ export class UserSettingsComponent implements OnInit {
             // }
         );
 
-        this.editUserForm.valueChanges.subscribe(data => this.onValueChanged(this.editUserForm, data));
+        this.editUserForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.editUserForm, data));
 
         this.onValueChanged(this.editUserForm);
     }
@@ -101,13 +109,17 @@ export class UserSettingsComponent implements OnInit {
     }
 
     updateUser(): void {
-        this._us.updateUser(this.user._id, this.editUserForm.value).subscribe(
+        this._us.updateUser(this.user._id, this.editUserForm.value).takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 console.log('User has been updated!');
             },
             error => {
-                console.log(error.message);
+                this._es.handleErrorRes(error);
             }
         );
+    }
+
+    ngOnDestroy() {
+        this.aliveSubscriptions = false;
     }
 }

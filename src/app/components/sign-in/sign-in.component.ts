@@ -1,28 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {UserService} from "../../services/user.service";
 import {FormService} from "../../services/form.service";
 import {ApiService} from "../../services/api.service";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
+import {ErrorService} from "../../services/error.service";
 
 @Component({
     selector: 'sign-in',
     templateUrl: 'sign-in.component.html'
 })
 
-export class SignInComponent implements OnInit {
+export class SignInComponent implements OnInit, OnDestroy {
 
     signInForm: FormGroup;
 
     errorMessages;
 
+    aliveSubscriptions: boolean;
+
     constructor(private _api: ApiService,
                 private _auth: AuthService,
                 private _router: Router,
                 private _fb: FormBuilder,
-                private _us: UserService,
-                private _fs: FormService) {
+                private _fs: FormService,
+                private _es: ErrorService) {
+        this.aliveSubscriptions = true;
         this.buildForm();
     }
 
@@ -30,9 +33,14 @@ export class SignInComponent implements OnInit {
         if (this._auth.isSignedIn()) {
             this._router.navigate(['']);
         } else {
-            this._fs.getErrorMessages('user').subscribe(res => {
-                this.errorMessages = res;
-            });
+            this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(
+                res => {
+                    this.errorMessages = res;
+                },
+                error => {
+                    this._es.handleErrorRes(error);
+                }
+            );
         }
     }
 
@@ -42,7 +50,7 @@ export class SignInComponent implements OnInit {
             password: [null, [Validators.required, Validators.minLength(8)]]
         });
 
-        this.signInForm.valueChanges.subscribe(data => this.onValueChanged(this.signInForm, data));
+        this.signInForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.signInForm, data));
 
         this.onValueChanged(this.signInForm);
     }
@@ -62,10 +70,18 @@ export class SignInComponent implements OnInit {
 
     signIn() {
         const values = this.signInForm.value;
-        this._api.post('authenticate', values)
-            .subscribe(res => {
+        this._api.post('authenticate', values).takeWhile(() => this.aliveSubscriptions).subscribe(
+            res => {
                 this._auth.setToken(res.data.token);
                 this._router.navigate(['']);
-            });
+            },
+            error => {
+                this._es.handleErrorRes(error);
+            }
+        );
+    }
+
+    ngOnDestroy() {
+        this.aliveSubscriptions = false;
     }
 }

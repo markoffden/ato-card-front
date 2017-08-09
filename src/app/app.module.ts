@@ -47,6 +47,9 @@ import { SwitchUserGenderPipe } from './shared/pipes/switch-user-gender.pipe';
 import { SwitchUserActivatedPipe } from './shared/pipes/switch-user-activated.pipe';
 import { SwitchCardStatusPipe } from './shared/pipes/switch-card-status.pipe';
 import { SwitchOutletTypePipe } from './shared/pipes/switch-outlet-type.pipe';
+import { ModalComponent } from './components/modal/modal.component';
+import {ModalService} from "./services/modal.service";
+import {ErrorService} from "./services/error.service";
 
 @NgModule({
     declarations: [
@@ -75,7 +78,8 @@ import { SwitchOutletTypePipe } from './shared/pipes/switch-outlet-type.pipe';
         SwitchUserGenderPipe,
         SwitchUserActivatedPipe,
         SwitchCardStatusPipe,
-        SwitchOutletTypePipe
+        SwitchOutletTypePipe,
+        ModalComponent
     ],
     imports: [
         BrowserModule,
@@ -96,7 +100,9 @@ import { SwitchOutletTypePipe } from './shared/pipes/switch-outlet-type.pipe';
         FormService,
         UserService,
         CardService,
-        OutletService
+        OutletService,
+        ModalService,
+        ErrorService
     ],
     bootstrap: [AppComponent]
 })

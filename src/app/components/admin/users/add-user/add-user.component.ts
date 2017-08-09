@@ -1,33 +1,43 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {FormService} from "../../../../services/form.service";
 import {Router} from "@angular/router";
+import {ErrorService} from "../../../../services/error.service";
 
 @Component({
     selector: 'add-user',
     templateUrl: 'add-user.component.html'
 })
 
-export class AddUserComponent implements OnInit {
+export class AddUserComponent implements OnInit, OnDestroy {
 
     addUserForm: FormGroup;
 
     errorMessages;
 
+    aliveSubsciptions: boolean;
+
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
                 private _fs: FormService,
-                private _router: Router) {
+                private _router: Router,
+                private _es: ErrorService) {
+        this.aliveSubsciptions = true;
         this.buildForm();
     }
 
     ngOnInit() {
-        this._fs.getErrorMessages('user').subscribe(res => {
-            this.errorMessages = res;
-        });
+        this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubsciptions).subscribe(
+            res => {
+                this.errorMessages = res;
+            },
+            error => {
+                this._es.handleErrorRes(error);
+            }
+        );
     }
 
     buildForm(): void {
@@ -47,7 +57,7 @@ export class AddUserComponent implements OnInit {
             validator: CustomValidators.matchValue('confirmPassword', 'password')
         });
 
-        this.addUserForm.valueChanges.subscribe(data => this.onValueChanged(this.addUserForm, data));
+        this.addUserForm.valueChanges.takeWhile(() => this.aliveSubsciptions).subscribe(data => this.onValueChanged(this.addUserForm, data));
 
         this.onValueChanged(this.addUserForm);
     }
@@ -70,12 +80,17 @@ export class AddUserComponent implements OnInit {
     }
 
     addUser() {
-        this._us.addUser(this.addUserForm.value).subscribe(res => {
-            if (res.error) {
-                console.log(res.error.message);
-            } else {
+        this._us.addUser(this.addUserForm.value).takeWhile(() => this.aliveSubsciptions).subscribe(
+            res => {
                 this._router.navigate(['admin/users']);
+            },
+            error => {
+                this._es.handleErrorRes(error);
             }
-        });
+        );
+    }
+
+    ngOnDestroy() {
+        this.aliveSubsciptions = false;
     }
 }

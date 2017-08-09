@@ -1,23 +1,19 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Card} from "../../../../../models/Card";
+import {ModalService} from "../../../../../services/modal.service";
 
 @Component({
   selector: '[card-list-item]',
   templateUrl: './card-list-item.component.html'
 })
-export class CardListItemComponent implements OnInit {
+export class CardListItemComponent {
 
     @Input() card: Card;
 
-    @Output() id: EventEmitter<string> = new EventEmitter<string>();
-
-    constructor() {
-    }
-
-    ngOnInit() {
+    constructor(private _ms: ModalService) {
     }
 
     deleteCard(id) {
-        this.id.emit(id);
+        this._ms.createConfirm('deleteCard', id);
     }
 }

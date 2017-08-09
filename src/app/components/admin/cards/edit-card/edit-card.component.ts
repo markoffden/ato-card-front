@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 import {FormService} from "../../../../services/form.service";
@@ -6,20 +6,23 @@ import {UserService} from "../../../../services/user.service";
 import {User} from '../../../../models/User';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import {CardService} from "../../../../services/card.service";
-import {Router, ActivatedRoute} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
+import {ErrorService} from "../../../../services/error.service";
 
 @Component({
     selector: 'edit-card',
     templateUrl: 'edit-card.component.html'
 })
 
-export class EditCardComponent implements OnInit {
+export class EditCardComponent implements OnInit, OnDestroy {
 
     errorMessages;
 
     users: User[];
 
     private cardId: string;
+
+    aliveSubscriptions: boolean;
 
     datePickerOpts: INgxMyDpOptions = {
         dayLabels: {
@@ -54,22 +57,22 @@ export class EditCardComponent implements OnInit {
         private _fs: FormService,
         private _cs: CardService,
         private _us: UserService,
-        private _router: Router,
         private _ds: DomSanitizer,
-        private _ar: ActivatedRoute) {
+        private _ar: ActivatedRoute,
+        private _es: ErrorService) {
+        this.users = [];
         this.buildForm();
     }
 
     ngOnInit() {
 
         // get error messages
-        this._fs.getErrorMessages('card').subscribe(res => {
+        this._fs.getErrorMessages('card').takeWhile(() => this.aliveSubscriptions).subscribe(res => {
             this.errorMessages = res;
         });
 
         // set users list
-        this.users = [];
-        this._us.getUsers().subscribe(res => {
+        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(res => {
             res.data.forEach((elem) => {
                 elem.fullName = `${elem.firstName} ${elem.lastName}`;
                 this.users.push(elem);
@@ -77,9 +80,9 @@ export class EditCardComponent implements OnInit {
         });
 
         // get card and set all form values
-        this._ar.params.subscribe(params => {
+        this._ar.params.takeWhile(() => this.aliveSubscriptions).subscribe(params => {
             this.cardId = params['id'];
-            this._cs.getCardById(params['id']).subscribe(
+            this._cs.getCardById(params['id']).takeWhile(() => this.aliveSubscriptions).subscribe(
                 res => {
                     let card = res.data;
                     if (card.dateIssued) {
@@ -95,7 +98,7 @@ export class EditCardComponent implements OnInit {
                         });
                     }
                     if (card.holder) {
-                        this._us.getUserById(card.holder).subscribe(
+                        this._us.getUserById(card.holder).takeWhile(() => this.aliveSubscriptions).subscribe(
                             data => {
                                 let cardHolder = data.data;
                                 cardHolder.toString = function () {
@@ -106,7 +109,7 @@ export class EditCardComponent implements OnInit {
                                 });
                             },
                             error => {
-                                console.log(error.message);
+                                this._es.handleErrorRes(error);
                             }
                         );
                     }
@@ -116,7 +119,7 @@ export class EditCardComponent implements OnInit {
                     });
                 },
                 error => {
-                    console.log(error.message);
+                    this._es.handleErrorRes(error);
                 }
             );
         });
@@ -158,7 +161,7 @@ export class EditCardComponent implements OnInit {
                 console.log('Card is updated');
             },
             error => {
-                console.log(error.message);
+                this._es.handleErrorRes(error);
             }
         );
     }
@@ -166,5 +169,9 @@ export class EditCardComponent implements OnInit {
     autocompleteListFormatter = (data: any) : SafeHtml => {
         let html = `<span>${data.firstName} ${data.lastName}</span>`;
         return this._ds.bypassSecurityTrustHtml(html);
+    };
+
+    ngOnDestroy() {
+        this.aliveSubscriptions = false;
     }
 }

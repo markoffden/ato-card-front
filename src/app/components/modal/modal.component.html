@@ -1,0 +1,23 @@
+<div *ngIf="modal" class="ng-modal-overlay">
+    <div *ngIf="modal.type === 'error'" class="panel panel-danger ng-modal">
+        <div class="panel-heading">
+            <h3 class="panel-title">Помилка</h3>
+        </div>
+        <div class="panel-body">
+            <p>{{modal.message}}</p>
+            <button (click)="destroyModal()" class="btn btn-default pull-right">OK</button>
+        </div>
+    </div>
+    <div *ngIf="modal.type === 'confirm'" class="panel panel-warning ng-modal">
+        <div class="panel-heading">
+            <h3 class="panel-title">Підтвердіть дію</h3>
+        </div>
+        <div class="panel-body">
+            <p *ngIf="modal.confirmType === 'deleteUser'">Видалити користувача?</p>
+            <p *ngIf="modal.confirmType === 'deleteCard'">Видалити карту?</p>
+            <p *ngIf="modal.confirmType === 'deleteOutlet'">Видалити заклад?</p>
+            <button (click)="destroyModal()" class="btn btn-default pull-right">Відміна</button>
+            <button (click)="confirmAction(modal.confirmType, modal.id)" class="btn btn-success pull-right">Так</button>
+        </div>
+    </div>
+</div>

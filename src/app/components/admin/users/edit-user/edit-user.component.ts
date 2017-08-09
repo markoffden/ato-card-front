@@ -1,19 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {FormService} from "../../../../services/form.service";
-import {Router, ActivatedRoute} from "@angular/router";
-import {User} from "../../../../models/User";
-import {error} from "selenium-webdriver";
+import {ActivatedRoute} from "@angular/router";
+import {ErrorService} from "../../../../services/error.service";
 
 @Component({
     selector: 'edit-user',
     templateUrl: 'edit-user.component.html'
 })
 
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, OnDestroy {
 
     editUserForm: FormGroup;
 
@@ -21,22 +20,25 @@ export class EditUserComponent implements OnInit {
 
     userId: string;
 
+    aliveSubscriptions: boolean;
+
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
                 private _fs: FormService,
-                private _router: Router,
-                private _ar: ActivatedRoute) {
+                private _ar: ActivatedRoute,
+                private _es: ErrorService) {
+        this.aliveSubscriptions = true;
         this.buildForm();
     }
 
     ngOnInit() {
-        this._fs.getErrorMessages('user').subscribe(res => {
+        this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(res => {
             this.errorMessages = res;
         });
 
-        this._ar.params.subscribe(params => {
+        this._ar.params.takeWhile(() => this.aliveSubscriptions).subscribe(params => {
             this.userId = params['id'];
-            this._us.getUserById(params['id']).subscribe(
+            this._us.getUserById(params['id']).takeWhile(() => this.aliveSubscriptions).subscribe(
                 res => {
                     let user = res.data;
                     this.editUserForm.setValue({
@@ -79,7 +81,7 @@ export class EditUserComponent implements OnInit {
         // }
         );
 
-        this.editUserForm.valueChanges.subscribe(data => this.onValueChanged(this.editUserForm, data));
+        this.editUserForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.editUserForm, data));
 
         this.onValueChanged(this.editUserForm);
     }
@@ -103,13 +105,17 @@ export class EditUserComponent implements OnInit {
     }
 
     updateUser(): void {
-        this._us.updateUser(this.userId, this.editUserForm.value).subscribe(
+        this._us.updateUser(this.userId, this.editUserForm.value).takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 console.log('User has been updated!');
             },
             error => {
-                console.log(error.message);
+                this._es.handleErrorRes(error);
             }
         );
+    }
+
+    ngOnDestroy() {
+        this.aliveSubscriptions = false;
     }
 }

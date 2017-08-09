@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 import {FormService} from "../../../../services/form.service";
@@ -7,17 +7,22 @@ import {User} from '../../../../models/User';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import {CardService} from "../../../../services/card.service";
 import {Router} from "@angular/router";
+import {ErrorService} from "../../../../services/error.service";
 
 @Component({
   selector: 'add-card',
   templateUrl: 'add-card.component.html'
 })
 
-export class AddCardComponent implements OnInit {
+export class AddCardComponent implements OnInit, OnDestroy {
 
     errorMessages;
 
     users: User[];
+
+    aliveSubscriptions: boolean;
+
+    addCardForm: FormGroup;
 
     datePickerOpts: INgxMyDpOptions = {
         dayLabels: {
@@ -53,28 +58,38 @@ export class AddCardComponent implements OnInit {
         private _cs: CardService,
         private _us: UserService,
         private _router: Router,
-        private _ds: DomSanitizer) {
+        private _ds: DomSanitizer,
+        private _es: ErrorService) {
+        this.aliveSubscriptions = true;
+        this.users = [];
         this.buildForm();
     }
 
     ngOnInit() {
 
         // get error messages
-        this._fs.getErrorMessages('card').subscribe(res => {
-            this.errorMessages = res;
-        });
+        this._fs.getErrorMessages('card').takeWhile(() => this.aliveSubscriptions).subscribe(
+            res => {
+                this.errorMessages = res;
+            },
+            error => {
+                this._es.handleErrorRes(error);
+            }
+        );
 
         // set users list
-        this.users = [];
-        this._us.getUsers().subscribe(res => {
-            res.data.forEach((elem) => {
-                elem.fullName = `${elem.firstName} ${elem.lastName}`;
-                this.users.push(elem);
-            });
-        });
+        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
+            res => {
+                res.data.forEach((elem) => {
+                    elem.fullName = `${elem.firstName} ${elem.lastName}`;
+                    this.users.push(elem);
+                });
+            },
+            error => {
+                this._es.handleErrorRes(error);
+            }
+        );
     }
-
-    addCardForm: FormGroup;
 
     buildForm(): void {
         this.addCardForm = this._fb.group({
@@ -84,29 +99,12 @@ export class AddCardComponent implements OnInit {
             status: [1]
         });
 
-        this.addCardForm.valueChanges.subscribe(data => this.onValueChanged(this.addCardForm, data));
+        this.addCardForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.addCardForm, data));
 
         this.onValueChanged(this.addCardForm);
     }
 
     onValueChanged = this._fs.processErrors.bind(this);
-
-    // setDate(): void {
-    //     let date = new Date();
-    //     this.addCardForm.setValue({
-    //         dateIssued: {
-    //             date: {
-    //                 year: date.getFullYear(),
-    //                 month: date.getMonth() + 1,
-    //                 day: date.getDate()
-    //             }
-    //         }
-    //     });
-    // }
-    //
-    // clearDate(): void {
-    //     this.addCardForm.setValue({dateIssued: null});
-    // }
 
     formErrors = {
         'number': ''
@@ -122,17 +120,22 @@ export class AddCardComponent implements OnInit {
         let payload = this.addCardForm.value;
         payload.holder = payload.holder ? payload.holder._id : null;
         payload.dateIssued = payload.dateIssued ? payload.dateIssued.jsdate : null;
-        this._cs.addCard(payload).subscribe(res => {
-            if (res.error) {
-                console.log(res.error.message);
-            } else {
+        this._cs.addCard(payload).takeWhile(() => this.aliveSubscriptions).subscribe(
+            res => {
                 this._router.navigate(['admin/cards']);
+            },
+            error => {
+                this._es.handleErrorRes(error);
             }
-        });
+        );
     }
 
     autocompleteListFormatter = (data: any) : SafeHtml => {
         let html = `<span>${data.firstName} ${data.lastName}</span>`;
         return this._ds.bypassSecurityTrustHtml(html);
+    };
+
+    ngOnDestroy() {
+        this.aliveSubscriptions = false;
     }
 }

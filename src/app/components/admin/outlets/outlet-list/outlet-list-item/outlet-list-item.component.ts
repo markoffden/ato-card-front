@@ -1,23 +1,19 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Outlet} from "../../../../../models/Outlet";
+import {ModalService} from "../../../../../services/modal.service";
 
 @Component({
   selector: '[outlet-list-item]',
   templateUrl: 'outlet-list-item.component.html'
 })
-export class OutletListItemComponent implements OnInit {
+export class OutletListItemComponent {
 
     @Input() outlet: Outlet;
 
-    @Output() id: EventEmitter<string> = new EventEmitter<string>();
-
-    constructor() {
-    }
-
-    ngOnInit() {
+    constructor(private _ms: ModalService) {
     }
 
     deleteOutlet(id) {
-        this.id.emit(id);
+        this._ms.createConfirm('deleteOutlet', id)
     }
 }

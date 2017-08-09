@@ -1,28 +1,43 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {User} from '../../../../models/User';
 import {UserService} from '../../../../services/user.service';
+import {ErrorService} from "../../../../services/error.service";
+import {ModalService} from "../../../../services/modal.service";
 
 @Component({
     selector: 'user-list',
     templateUrl: 'user-list.component.html'
 })
 
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
 
-    constructor(private _us: UserService) {
+    private users: User[];
+
+    private aliveSubscriptions: boolean;
+
+    constructor(private _us: UserService, private _es: ErrorService, private _ms: ModalService) {
+        this.users = [];
+        this.aliveSubscriptions = true;
     }
 
-    users: User[];
-
     ngOnInit() {
-        this.users = [];
-        this._us.getUsers().subscribe(res => {
-            this.users = res.data;
-        });
+        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
+            res => {
+                this.users = res.data;
+            }
+        );
+
+        this._ms.deleteUser.takeWhile(() => this.aliveSubscriptions).subscribe(
+            id => {
+                if (id) {
+                    this.removeUser(id);
+                }
+            }
+        );
     }
 
     removeUser(id) {
-        this._us.deleteUser(id).subscribe(
+        this._us.deleteUser(id).takeWhile(() => this.aliveSubscriptions).subscribe(
             result => {
                 let users = this.users;
                 for (let i = 0; i < users.length; i++) {
@@ -32,7 +47,12 @@ export class UserListComponent implements OnInit {
                 }
             },
             error => {
-                console.log(error.message);
-        });
+                this._es.handleErrorRes(error);
+            }
+        );
+    }
+
+    ngOnDestroy() {
+        this.aliveSubscriptions = false;
     }
 }
