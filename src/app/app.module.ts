@@ -50,6 +50,7 @@ import { SwitchOutletTypePipe } from './shared/pipes/switch-outlet-type.pipe';
 import { ModalComponent } from './components/modal/modal.component';
 import {ModalService} from "./services/modal.service";
 import {ErrorService} from "./services/error.service";
+import { MapComponent } from './components/map/map.component';
 
 @NgModule({
     declarations: [
@@ -79,7 +80,8 @@ import {ErrorService} from "./services/error.service";
         SwitchUserActivatedPipe,
         SwitchCardStatusPipe,
         SwitchOutletTypePipe,
-        ModalComponent
+        ModalComponent,
+        MapComponent
     ],
     imports: [
         BrowserModule,
