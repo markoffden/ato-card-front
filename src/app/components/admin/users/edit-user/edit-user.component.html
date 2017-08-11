@@ -4,17 +4,17 @@
         <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()" class="col-md-10 col-md-offset-1">
             <div class="row">
                 <div [ngClass]="{'has-error': formErrors.firstName}" class="form-group col-sm-6">
-                    <label for="first-name">Ім'я</label>
+                    <label for="first-name" class="required">Ім'я</label>
                     <input type="text" formControlName="firstName" class="form-control" id="first-name" placeholder="Ім'я">
                     <small *ngIf="formErrors.firstName" class="form-control-response">{{formErrors.firstName}}</small>
                 </div>
                 <div [ngClass]="{'has-error': formErrors.lastName}" class="form-group col-sm-6">
-                    <label for="last-name">Прізвище</label>
+                    <label for="last-name" class="required">Прізвище</label>
                     <input type="text" formControlName="lastName" class="form-control" id="last-name" placeholder="Прізвище">
                     <small *ngIf="formErrors.lastName" class="form-control-response">{{formErrors.lastName}}</small>
                 </div>
                 <div [ngClass]="{'has-error': formErrors.email}" class="form-group col-sm-6">
-                    <label for="email">Email</label>
+                    <label for="email" class="required">Email</label>
                     <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email">
                     <small *ngIf="formErrors.email" class="form-control-response">{{formErrors.email}}</small>
                 </div>
@@ -56,10 +56,10 @@
                     <!--<input type="password" formControlName="confirmPassword" class="form-control" id="confirm-password" placeholder="Підтвердження паролю">-->
                     <!--<small *ngIf="formErrors.confirmPassword" class="form-control-response">{{formErrors.confirmPassword}}</small>-->
                 <!--</div>-->
-                <div class="form-group col-sm-6">
-                    <label for="avatar">Аватар</label>
-                    <input type="text" formControlName="avatarUrl" class="form-control" id="avatar" placeholder="Аватар">
-                </div>
+                <!--<div class="form-group col-sm-6">-->
+                    <!--<label for="avatar">Аватар</label>-->
+                    <!--<input type="text" formControlName="avatarUrl" class="form-control" id="avatar" placeholder="Аватар">-->
+                <!--</div>-->
                 <div class="form-group col-sm-6">
                     <label>Активовано</label>
                     <div>
@@ -72,6 +72,7 @@
                     </div>
                 </div>
             </div>
+            <p class="required-note">Поля, позначені <span>*</span>, є обов'язковими</p>
             <button [disabled]="!editUserForm.valid" type="submit" class="btn btn-success pull-right">Зберегти</button>
             <button routerLink="/admin/users" class="btn btn-danger pull-right">Скасувати</button>
         </form>

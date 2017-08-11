@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
 import {CustomValidators} from "../../../../shared/custom-validators";
@@ -42,13 +42,27 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
     buildForm(): void {
         this.addUserForm = this._fb.group({
-            firstName: [null, [CustomValidators.required(), Validators.minLength(2)]],
-            lastName: [null, [Validators.required, Validators.minLength(2)]],
+            firstName: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(2)
+            ]],
+            lastName: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(2)
+            ]],
             gender: [true],
-            email: [null, [Validators.email]],
+            email: [null, [
+                CustomValidators.required(),
+                CustomValidators.email()
+            ]],
             address: [null],
             phone: [null],
-            password: [null, [Validators.required, Validators.minLength(8)]],
+            password: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(8),
+                CustomValidators.maxLength(12),
+                CustomValidators.password()
+            ]],
             confirmPassword: [null],
             role: [1],
             activated: [false],

@@ -1,11 +1,12 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {FormService} from "../../../../services/form.service";
 import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
+import {ModalService} from "../../../../services/modal.service";
 
 @Component({
     selector: 'edit-user',
@@ -26,7 +27,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
                 private _us: UserService,
                 private _fs: FormService,
                 private _ar: ActivatedRoute,
-                private _es: ErrorService) {
+                private _es: ErrorService,
+                private _ms: ModalService) {
         this.aliveSubscriptions = true;
         this.buildForm();
     }
@@ -64,10 +66,19 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
     buildForm(): void {
         this.editUserForm = this._fb.group({
-            firstName: [null, [Validators.required, Validators.minLength(2)]],
-            lastName: [null, [Validators.required, Validators.minLength(2)]],
+            firstName: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(2)
+            ]],
+            lastName: [null, [
+                CustomValidators.required,
+                CustomValidators.minLength(2)
+            ]],
             gender: [true],
-            email: [{value: null, disabled: true}, [Validators.email]],
+            email: [{value: null, disabled: true}, [
+                CustomValidators.required(),
+                CustomValidators.email()
+            ]],
             address: [null],
             phone: [null],
             // password: [null, [Validators.required, Validators.minLength(8)]],
@@ -105,9 +116,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
     }
 
     updateUser(): void {
-        this._us.updateUser(this.userId, this.editUserForm.value).takeWhile(() => this.aliveSubscriptions).subscribe(
+        let payload: Object = {};
+        for (let key in this.editUserForm.value) {
+            if (key !== 'email') {
+                payload[key] = this.editUserForm.value[key];
+            }
+        }
+        this._us.updateUser(this.userId, payload).takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
-                console.log('User has been updated!');
+                this._ms.createAlert('success', 'Дані про користувача оновлено');
             },
             error => {
                 this._es.handleErrorRes(error);

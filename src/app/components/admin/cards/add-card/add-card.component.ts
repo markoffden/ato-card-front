@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 import {FormService} from "../../../../services/form.service";
 import {UserService} from "../../../../services/user.service";
@@ -8,6 +8,7 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import {CardService} from "../../../../services/card.service";
 import {Router} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
+import {CustomValidators} from "../../../../shared/custom-validators";
 
 @Component({
   selector: 'add-card',
@@ -89,11 +90,27 @@ export class AddCardComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
+
+        // patch Datepicker value with current date
+        let today = new Date();
+        this.addCardForm.patchValue({
+            dateIssued: {
+                date: {
+                    year: today.getFullYear(),
+                    month: today.getMonth() + 1,
+                    day: today.getDate()
+                }
+            }
+        });
     }
 
     buildForm(): void {
         this.addCardForm = this._fb.group({
-            number: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(12)]],
+            number: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(8),
+                CustomValidators.maxLength(12)
+            ]],
             dateIssued: [null],
             holder: [null],
             status: [1]
@@ -119,7 +136,7 @@ export class AddCardComponent implements OnInit, OnDestroy {
     addCard() {
         let payload = this.addCardForm.value;
         payload.holder = payload.holder ? payload.holder._id : null;
-        payload.dateIssued = payload.dateIssued ? payload.dateIssued.jsdate : null;
+        payload.dateIssued = payload.dateIssued.jsdate ? payload.dateIssued.jsdate : new Date();
         this._cs.addCard(payload).takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 this._router.navigate(['admin/cards']);

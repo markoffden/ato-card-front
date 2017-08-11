@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
 import {AuthService} from '../../services/auth.service';
 import {FormService} from "../../services/form.service";
@@ -47,13 +47,27 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
     buildForm(): void {
         this.signUpForm = this._fb.group({
-            firstName: [null, [Validators.required, Validators.minLength(2)]],
-            lastName: [null, [Validators.required, Validators.minLength(2)]],
+            firstName: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(2)
+            ]],
+            lastName: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(2)
+            ]],
             gender: [true],
-            email: [null, [Validators.email]],
+            email: [null, [
+                CustomValidators.required(),
+                CustomValidators.email()
+            ]],
             address: [null],
             phone: [null],
-            password: [null, [Validators.required, Validators.minLength(8)]],
+            password: [null, [
+                CustomValidators.required(),
+                CustomValidators.password(),
+                CustomValidators.minLength(8),
+                CustomValidators.maxLength(12)
+            ]],
             confirmPassword: [null],
             avatarUrl: [null]
         }, {

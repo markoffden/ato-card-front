@@ -1,10 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {FormService} from "../../services/form.service";
 import {ApiService} from "../../services/api.service";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {ErrorService} from "../../services/error.service";
+import {CustomValidators} from "../../shared/custom-validators";
 
 @Component({
     selector: 'sign-in',
@@ -46,8 +47,16 @@ export class SignInComponent implements OnInit, OnDestroy {
 
     buildForm(): void {
         this.signInForm = this._fb.group({
-            email: [null, [Validators.email]],
-            password: [null, [Validators.required, Validators.minLength(8)]]
+            email: [null, [
+                CustomValidators.required(),
+                CustomValidators.email()
+            ]],
+            password: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(8),
+                CustomValidators.maxLength(12),
+                CustomValidators.password(),
+            ]]
         });
 
         this.signInForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.signInForm, data));

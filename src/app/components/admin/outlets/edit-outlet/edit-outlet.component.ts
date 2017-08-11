@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {FormService} from "../../../../services/form.service";
 import {UserService} from "../../../../services/user.service";
 import {User} from '../../../../models/User';
@@ -7,6 +7,8 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import {OutletService} from "../../../../services/outlet.service";
 import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
+import {CustomValidators} from "../../../../shared/custom-validators";
+import {ModalService} from "../../../../services/modal.service";
 
 @Component({
     selector: 'edit-outlet',
@@ -32,7 +34,8 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         private _us: UserService,
         private _ds: DomSanitizer,
         private _ar: ActivatedRoute,
-        private _es: ErrorService) {
+        private _es: ErrorService,
+        private _ms: ModalService) {
         this.users = [];
         this.aliveSubscriptions = true;
         this.buildForm();
@@ -104,13 +107,13 @@ export class EditOutletComponent implements OnInit, OnDestroy {
 
     buildForm(): void {
         this.editOutletForm = this._fb.group({
-            name: [null, Validators.required],
-            discountType: [null, Validators.required],
-            address: [null, Validators.required],
+            name: [null, CustomValidators.required()],
+            discountType: [null, CustomValidators.required()],
+            address: [null, CustomValidators.required()],
             longitude: [null],
             latitude: [null],
             type: [1],
-            provider: [null, Validators.required]
+            provider: [null]
         });
 
         this.editOutletForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.editOutletForm, data));
@@ -138,7 +141,7 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         payload.provider = payload.provider ? payload.provider._id : null;
         this._os.updateOutlet(this.outletId, payload).takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
-                console.log('Outlet is updated');
+                this._ms.createAlert('success', 'Дані про заклад оновлено');
             },
             error => {
                 this._es.handleErrorRes(error);

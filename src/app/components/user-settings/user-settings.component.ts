@@ -4,10 +4,9 @@ import {UserService} from "../../services/user.service";
 
 import {CustomValidators} from "../../shared/custom-validators";
 import {FormService} from "../../services/form.service";
-import {Router, ActivatedRoute} from "@angular/router";
 import {User} from "../../models/User";
-import {error} from "selenium-webdriver";
 import {ErrorService} from "../../services/error.service";
+import {ModalService} from "../../services/modal.service";
 
 @Component({
     selector: 'user-settings',
@@ -27,7 +26,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
                 private _fs: FormService,
-                private _es: ErrorService) {
+                private _es: ErrorService,
+                private _ms: ModalService) {
         this.aliveSubscriptions = true;
         this.buildForm();
     }
@@ -68,10 +68,19 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
     buildForm(): void {
         this.editUserForm = this._fb.group({
-                firstName: [null, [Validators.required, Validators.minLength(2)]],
-                lastName: [null, [Validators.required, Validators.minLength(2)]],
+                firstName: [null, [
+                    CustomValidators.required(),
+                    CustomValidators.minLength(2)
+                ]],
+                lastName: [null, [
+                    CustomValidators.required(),
+                    CustomValidators.minLength(2)
+                ]],
                 gender: [true],
-                email: [{value: null, disabled: true}, [Validators.email]],
+                email: [{value: null, disabled: true}, [
+                    CustomValidators.required(),
+                    CustomValidators.email()
+                ]],
                 address: [null],
                 phone: [null],
                 // password: [null, [Validators.required, Validators.minLength(8)]],
@@ -109,9 +118,15 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     }
 
     updateUser(): void {
-        this._us.updateUser(this.user._id, this.editUserForm.value).takeWhile(() => this.aliveSubscriptions).subscribe(
+        let payload: Object = {};
+        for (let key in this.editUserForm.value) {
+            if (key !== 'email') {
+                payload[key] = this.editUserForm.value[key];
+            }
+        }
+        this._us.updateUser(this.user._id, payload).takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
-                console.log('User has been updated!');
+                this._ms.createAlert('success', 'Дані про користувача оновлено');
             },
             error => {
                 this._es.handleErrorRes(error);

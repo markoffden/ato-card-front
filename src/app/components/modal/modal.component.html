@@ -8,6 +8,15 @@
             <button (click)="destroyModal()" class="btn btn-default pull-right">OK</button>
         </div>
     </div>
+    <div *ngIf="modal.type === 'success'" class="panel panel-success ng-modal">
+        <div class="panel-heading">
+            <h3 class="panel-title">Виконано</h3>
+        </div>
+        <div class="panel-body">
+            <p>{{modal.message}}</p>
+            <button (click)="destroyModal()" class="btn btn-default pull-right">OK</button>
+        </div>
+    </div>
     <div *ngIf="modal.type === 'confirm'" class="panel panel-warning ng-modal">
         <div class="panel-heading">
             <h3 class="panel-title">Підтвердіть дію</h3>

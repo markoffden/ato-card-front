@@ -9,13 +9,35 @@
     .form-control-response {
         position: absolute;
         left: 15px;
-        bottom: 0;
+        top: 60px;
     }
 
     &.has-error {
         .form-control-response {
-            color: #a94442;
+            color: $input-error;
         }
+    }
+
+    label {
+        &.required {
+            &:after {
+                content: '*';
+                color: $input-error;
+                font-size: 14px;
+                margin-left: 3px;
+            }
+        }
+    }
+}
+
+.required-note {
+    font-size: 12px;
+    margin-bottom: 5px;
+    text-align: right;
+
+    span {
+        color: $input-error;
+        font-size: 14px;
     }
 }
 

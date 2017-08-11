@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 import {FormService} from "../../../../services/form.service";
 import {UserService} from "../../../../services/user.service";
@@ -8,6 +8,8 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import {CardService} from "../../../../services/card.service";
 import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
+import {CustomValidators} from "../../../../shared/custom-validators";
+import {ModalService} from "../../../../services/modal.service";
 
 @Component({
     selector: 'edit-card',
@@ -59,7 +61,9 @@ export class EditCardComponent implements OnInit, OnDestroy {
         private _us: UserService,
         private _ds: DomSanitizer,
         private _ar: ActivatedRoute,
-        private _es: ErrorService) {
+        private _es: ErrorService,
+        private _ms: ModalService) {
+        this.aliveSubscriptions = true;
         this.users = [];
         this.buildForm();
     }
@@ -129,7 +133,11 @@ export class EditCardComponent implements OnInit, OnDestroy {
 
     buildForm(): void {
         this.editCardForm = this._fb.group({
-            number: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(12)]],
+            number: [null, [
+                CustomValidators.required(),
+                CustomValidators.minLength(8),
+                CustomValidators.maxLength(12)
+            ]],
             dateIssued: [null],
             holder: [null],
             status: [1]
@@ -158,7 +166,7 @@ export class EditCardComponent implements OnInit, OnDestroy {
         payload.dateIssued = payload.dateIssued ? payload.dateIssued.jsdate : null;
         this._cs.updateCard(this.cardId, payload).subscribe(
             res => {
-                console.log('Card is updated');
+                this._ms.createAlert('success', 'Дані про карту оновлено');
             },
             error => {
                 this._es.handleErrorRes(error);
