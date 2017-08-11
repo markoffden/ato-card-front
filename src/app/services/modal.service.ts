@@ -1,5 +1,6 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import {Subject, BehaviorSubject} from "rxjs";
+import {Router, NavigationStart} from "@angular/router";
 
 @Injectable()
 export class ModalService {
@@ -11,7 +12,12 @@ export class ModalService {
     deleteCard: EventEmitter<string> = new EventEmitter<string>();
     deleteOutlet: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor() {
+    constructor(private _router: Router) {
+        this._router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.destroyModal(); // TODO
+            }
+        });
     }
 
     createAlert(type: string, message: string) {
