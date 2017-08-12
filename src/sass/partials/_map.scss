@@ -1,0 +1,35 @@
+/*
+    Map
+ */
+
+#map {
+    height: 500px;
+}
+
+.map-tooltip {
+    margin: 0;
+    padding: 15px 0 13px 15px;
+
+
+    @media screen and (min-width: $tablet) {
+        width: 320px;
+    }
+
+    .image {
+        padding: 0 15px 0 0;
+        text-align: center;
+    }
+
+    .meta {
+        border-left: 1px solid $gray-lighter;
+        padding: 0 0 0 15px;
+
+        h3 {
+            margin: 0 0 5px 0;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+    }
+}

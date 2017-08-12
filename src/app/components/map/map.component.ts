@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {Outlet} from "../../models/Outlet";
+import {OutletService} from "../../services/outlet.service";
+import {ErrorService} from "../../services/error.service";
 declare var google;
 
 @Component({
@@ -7,19 +10,61 @@ declare var google;
 })
 export class MapComponent implements OnInit {
 
-    constructor() {
+    ck = { lat: 49.441388, lng: 32.064458 };
+
+    map: any = null;
+
+    constructor(private _os: OutletService, private _es: ErrorService) {
+
     }
 
     ngOnInit() {
-        const ck = {lat: 49.441388, lng: 32.064458};
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 14,
-            center: ck,
+        this._os.getOutlets().subscribe(
+            res => {
+                this.setMarkers(res.data);
+            },
+            error => {
+                this._es.handleErrorRes(error);
+            }
+        );
+
+        this.map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: this.ck,
             scrollwheel: false
         });
-        new google.maps.Marker({
-            position: ck,
-            map: map
+    }
+
+    setMarkers(outlets: Outlet[]) {
+
+        let theMap = this.map;
+
+        outlets.forEach((outlet) => {
+            if (outlet.latitude && outlet.longitude) {
+
+                let infoWindow = new google.maps.InfoWindow({
+                    content: `<div class="row map-tooltip">
+                                  <div class="image col-xs-3">
+                                      <img src="assets/images/map-tooltip-icon-${outlet.type}.svg">
+                                  </div>
+                                  <div class="meta col-xs-9">
+                                      <h3>${outlet.name}</h3>
+                                      <p><strong>Знижка:</strong> ${outlet.discountType}</p>
+                                      <p><strong>Адреса:</strong> ${outlet.address}</p>
+                                  </div>
+                              </div>`
+                });
+
+                let marker = new google.maps.Marker({
+                    position: { lat: outlet.latitude, lng: outlet.longitude },
+                    map: theMap,
+                    icon: `assets/images/map-marker-${outlet.type}.svg`
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infoWindow.open(theMap, marker);
+                });
+            }
         });
     }
 }
