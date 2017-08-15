@@ -3,6 +3,7 @@ import {User} from '../../../../models/User';
 import {UserService} from '../../../../services/user.service';
 import {ErrorService} from "../../../../services/error.service";
 import {ModalService} from "../../../../services/modal.service";
+import {LoaderService} from "../../../../services/loader.service";
 
 @Component({
     selector: 'user-list',
@@ -15,15 +16,22 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     private aliveSubscriptions: boolean;
 
-    constructor(private _us: UserService, private _es: ErrorService, private _ms: ModalService) {
+    constructor(private _us: UserService,
+                private _es: ErrorService,
+                private _ms: ModalService,
+                private _ls: LoaderService) {
         this.users = [];
         this.aliveSubscriptions = true;
     }
 
     ngOnInit() {
+
         this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 this.users = res.data;
+            },
+            error => {
+                this._es.handleErrorRes(error);
             }
         );
 

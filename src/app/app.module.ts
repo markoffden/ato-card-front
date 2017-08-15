@@ -51,6 +51,8 @@ import { ModalComponent } from './components/modal/modal.component';
 import {ModalService} from "./services/modal.service";
 import {ErrorService} from "./services/error.service";
 import { MapComponent } from './components/map/map.component';
+import { LoaderComponent } from './components/loader/loader.component';
+import {LoaderService} from "./services/loader.service";
 
 @NgModule({
     declarations: [
@@ -81,7 +83,8 @@ import { MapComponent } from './components/map/map.component';
         SwitchCardStatusPipe,
         SwitchOutletTypePipe,
         ModalComponent,
-        MapComponent
+        MapComponent,
+        LoaderComponent
     ],
     imports: [
         BrowserModule,
@@ -104,7 +107,8 @@ import { MapComponent } from './components/map/map.component';
         CardService,
         OutletService,
         ModalService,
-        ErrorService
+        ErrorService,
+        LoaderService
     ],
     bootstrap: [AppComponent]
 })
