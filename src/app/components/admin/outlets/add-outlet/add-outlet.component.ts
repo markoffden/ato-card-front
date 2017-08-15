@@ -78,6 +78,7 @@ export class AddOutletComponent implements OnInit, OnDestroy {
 
         this.map.addListener('dblclick', (e) => {
             this.placeMarker(e.latLng);
+            console.log(e.latLng);
         });
     }
 
@@ -125,10 +126,9 @@ export class AddOutletComponent implements OnInit, OnDestroy {
     addOutlet() {
         let payload = this.addOutletForm.value;
         payload.provider = payload.provider ? payload.provider._id : null;
-        if (this.marker) {
-            payload.latitude = this.marker.position.lat();
-            payload.longitude = this.marker.position.lng();
-        }
+        payload.latitude = this.marker ? this.marker.position.lat() : null;
+        payload.longitude = this.marker ? this.marker.position.lng() : null;
+
         this._os.addOutlet(payload).subscribe(
             res => {
                 this._router.navigate(['admin/outlets']);

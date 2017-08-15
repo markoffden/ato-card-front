@@ -9,6 +9,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {ModalService} from "../../../../services/modal.service";
+declare var google;
 
 @Component({
     selector: 'edit-outlet',
@@ -26,6 +27,11 @@ export class EditOutletComponent implements OnInit, OnDestroy {
     editOutletForm: FormGroup;
 
     aliveSubscriptions: boolean;
+
+    // map config
+    ck = { lat: 49.441388, lng: 32.064458 };
+    map: any = null;
+    marker: any = null;
 
     constructor(
         private _fb: FormBuilder,
@@ -66,6 +72,18 @@ export class EditOutletComponent implements OnInit, OnDestroy {
             }
         );
 
+        // init map
+        this.map = new google.maps.Map(document.getElementById('single-outlet-map'), {
+            zoom: 13,
+            center: this.ck,
+            scrollwheel: false,
+            disableDoubleClickZoom: true
+        });
+
+        this.map.addListener('dblclick', (e) => {
+            this.placeMarker(e.latLng);
+        });
+
         // get outlet data and patch form
         this._ar.params.takeWhile(() => this.aliveSubscriptions).subscribe(params => {
             this.outletId = params['id'];
@@ -88,12 +106,18 @@ export class EditOutletComponent implements OnInit, OnDestroy {
                             }
                         );
                     }
+                    if (outlet.latitude && outlet.longitude) {
+                        this.marker = new google.maps.Marker({
+                            position: {lat: outlet.latitude, lng: outlet.longitude},
+                            map: this.map,
+                            icon: `assets/images/map-marker-${outlet.type}.svg`
+                        });
+                        this.map.panTo({lat: outlet.latitude, lng: outlet.longitude});
+                    }
                     this.editOutletForm.patchValue({
                         name: outlet.name || null,
                         discountType: outlet.discountType || null,
                         address: outlet.address || null,
-                        longitude: outlet.longitude || null,
-                        latitude: outlet.latitude || null,
                         type: outlet.type || 1
                     });
                 },
@@ -105,13 +129,23 @@ export class EditOutletComponent implements OnInit, OnDestroy {
 
     }
 
+    placeMarker(position) {
+        if (this.marker) {
+            this.marker.setMap(null);
+        }
+        this.marker = new google.maps.Marker({
+            position: position,
+            map: this.map,
+            icon: `assets/images/map-marker-${this.editOutletForm.value.type}.svg`
+        });
+        this.map.panTo(position);
+    }
+
     buildForm(): void {
         this.editOutletForm = this._fb.group({
             name: [null, CustomValidators.required()],
             discountType: [null, CustomValidators.required()],
             address: [null, CustomValidators.required()],
-            longitude: [null],
-            latitude: [null],
             type: [1],
             provider: [null]
         });
@@ -139,6 +173,8 @@ export class EditOutletComponent implements OnInit, OnDestroy {
     updateOutlet() {
         let payload = this.editOutletForm.value;
         payload.provider = payload.provider ? payload.provider._id : null;
+        payload.latitude = this.marker ? this.marker.position.lat() : null;
+        payload.longitude = this.marker ? this.marker.position.lng() : null;
         this._os.updateOutlet(this.outletId, payload).takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 this._ms.createAlert('success', 'Дані про заклад оновлено');
