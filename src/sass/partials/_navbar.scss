@@ -1,0 +1,66 @@
+/*
+    Navbar
+ */
+
+.navbar {
+    background-color: $accent-green;
+    border: none;
+    margin-bottom: 0;
+
+    .navbar-brand {
+        color: white;
+
+        &:hover,
+        &:focus {
+            color: white;
+        }
+    }
+
+    .navbar-top-links {
+        font-size: 0;
+        float: right;
+        margin-right: 0;
+
+        li {
+            display: inline-block;
+
+            &:last-child {
+                margin-right: 15px;
+            }
+
+            a {
+                color: white;
+                cursor: pointer;
+                font-size: 14px;
+                padding: 15px;
+                min-height: 50px;
+
+                &:hover,
+                &:focus {
+                    color: $accent-green;
+                }
+            }
+        }
+
+        .dropdown-menu {
+            li {
+                display: block;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+
+                a {
+                    color: $accent-green;
+                    padding: 3px 20px;
+                    min-height: 0;
+                }
+            }
+        }
+
+        .dropdown-user {
+            right: 0;
+            left: auto;
+        }
+    }
+}

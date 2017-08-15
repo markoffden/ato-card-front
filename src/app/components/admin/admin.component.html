@@ -1,5 +1,5 @@
-<div class="navbar-default sidebar" role="navigation">
-    <div class="sidebar-nav navbar-collapse">
+<div [ngClass]="{'active': showSidebar}" class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav">
         <ul class="nav" id="side-menu">
             <li class="sidebar-search">
                 <div class="input-group custom-search-form">
@@ -22,6 +22,10 @@
             </li>
         </ul>
     </div><!-- .navbar-static-side -->
+    <button (click)="toggleSidebar()" class="toggle-sidebar btn btn-info">
+        <span *ngIf="!showSidebar" class="fa fa-bars"></span>
+        <span *ngIf="showSidebar" class="fa fa-chevron-up"></span>
+    </button>
 </div><!-- .sidebar-collapse -->
 
 <div class="admin-content-wrapper">
