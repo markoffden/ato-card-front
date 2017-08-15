@@ -6,6 +6,24 @@
     height: 500px;
 }
 
+.single-outlet-map-wrapper {
+    margin: 10px 0 35px;
+
+    p {
+        font-size: 12px;
+        margin: 0 0 5px 0;
+        
+        span {
+            color: red;
+            font-size: 16px;
+        }
+    }
+
+    #single-outlet-map {
+        height: 350px;
+    }
+}
+
 .map-tooltip {
     margin: 0;
     padding: 15px 0 13px 15px;
