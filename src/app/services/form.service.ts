@@ -14,7 +14,7 @@ export class FormService {
     private errorMessages;
 
     getErrorMessages(slug) {
-        return this._http.get('data/form-error-messages.json').map(res => res.json()[slug]);
+        return this._http.get('assets/data/form-error-messages.json').map(res => res.json()[slug]);
     }
 
     processErrors(form: FormGroup, data?: any) {
