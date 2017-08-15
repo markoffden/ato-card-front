@@ -53,6 +53,7 @@ import {ErrorService} from "./services/error.service";
 import { MapComponent } from './components/map/map.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import {LoaderService} from "./services/loader.service";
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
     declarations: [
@@ -84,7 +85,8 @@ import {LoaderService} from "./services/loader.service";
         SwitchOutletTypePipe,
         ModalComponent,
         MapComponent,
-        LoaderComponent
+        LoaderComponent,
+        FooterComponent
     ],
     imports: [
         BrowserModule,
