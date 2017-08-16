@@ -31,7 +31,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             },
             () => {
-                this._ls.toggleLoader(false);
+                setTimeout(() => {
+                    this._ls.toggleLoader(false);
+                }, 750);
             }
         );
     }

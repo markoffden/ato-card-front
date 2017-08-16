@@ -25,6 +25,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this._ls.toggleLoader(true);
 
         this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
@@ -32,6 +33,11 @@ export class UserListComponent implements OnInit, OnDestroy {
             },
             error => {
                 this._es.handleErrorRes(error);
+            },
+            () => {
+                setTimeout(() => {
+                    this._ls.toggleLoader(false);
+                }, 1000);
             }
         );
 
