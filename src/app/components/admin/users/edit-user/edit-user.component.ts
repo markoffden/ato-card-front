@@ -7,6 +7,7 @@ import {FormService} from "../../../../services/form.service";
 import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
 import {ModalService} from "../../../../services/modal.service";
+import {LoaderService} from "../../../../services/loader.service";
 
 @Component({
     selector: 'edit-user',
@@ -28,12 +29,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
                 private _fs: FormService,
                 private _ar: ActivatedRoute,
                 private _es: ErrorService,
-                private _ms: ModalService) {
+                private _ms: ModalService,
+                private _ls: LoaderService) {
         this.aliveSubscriptions = true;
         this.buildForm();
     }
 
     ngOnInit() {
+        this._ls.turnLoaderOn();
+
         this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(res => {
             this.errorMessages = res;
         });
@@ -59,6 +63,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
                 },
                 error => {
                     console.log(error.message);
+                },
+                () => {
+                    this._ls.turnLoaderOff();
                 }
             );
         });

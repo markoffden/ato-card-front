@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, HostBinding} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UserService} from "../../services/user.service";
 
@@ -7,6 +7,7 @@ import {FormService} from "../../services/form.service";
 import {User} from "../../models/User";
 import {ErrorService} from "../../services/error.service";
 import {ModalService} from "../../services/modal.service";
+import {LoaderService} from "../../services/loader.service";
 
 @Component({
     selector: 'user-settings',
@@ -23,16 +24,21 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
     aliveSubscriptions: boolean;
 
+    @HostBinding('class.page-content-wrapper') pageContentWrapper: boolean = true;
+
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
                 private _fs: FormService,
                 private _es: ErrorService,
-                private _ms: ModalService) {
+                private _ms: ModalService,
+                private _ls: LoaderService) {
         this.aliveSubscriptions = true;
         this.buildForm();
     }
 
     ngOnInit() {
+        this._ls.turnLoaderOn();
+
         this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 this.errorMessages = res;
@@ -62,6 +68,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
             },
             error => {
                 this._es.handleErrorRes(error);
+            },
+            () => {
+                this._ls.turnLoaderOff();
             }
         );
     }

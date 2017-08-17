@@ -1,32 +1,30 @@
-<div class="page-content-wrapper">
-    <loader></loader>
-    <h1>Профіль користувача</h1>
-    <div *ngIf="user" class="container">
-        <div class="row">
-            <div class="user-avatar col-md-4 col-md-offset-2">
-                <img src="assets/images/avatar-placeholder-500.png" alt="User">
-            </div>
-            <div class="user-info col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-0">
-                <h3>Ім'я</h3>
-                <p>{{user.firstName || 'n/a'}}</p>
-                <h3>Прізвище</h3>
-                <p>{{user.lastName || 'n/a'}}</p>
-                <h3>Стать</h3>
-                <p>{{user.gender | switchUserGender}}</p>
-                <h3>Email</h3>
-                <p>{{user.email || 'n/a'}}</p>
-                <h3>Адреса</h3>
-                <p>{{user.address || 'n/a'}}</p>
-                <h3>Телефон</h3>
-                <p>{{user.phone || 'n/a'}}</p>
-                <h3>Роль</h3>
-                <p>{{user.role | switchUserRole}}</p>
-                <h3>Активовано</h3>
-                <p>{{user.activated | switchUserActivated}}</p>
-                <button routerLink="/user-settings" class="btn btn-warning pull-right">
-                    <span class="fa fa-pencil"></span> Редагувати
-                </button>
-            </div>
+<loader></loader>
+<h1>Профіль користувача</h1>
+<div *ngIf="user" class="container">
+    <div class="row">
+        <div class="user-avatar col-md-4 col-md-offset-2">
+            <img src="assets/images/avatar-placeholder-500.png" alt="User">
+        </div>
+        <div class="user-info col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-0">
+            <h3>Ім'я</h3>
+            <p>{{user.firstName || 'n/a'}}</p>
+            <h3>Прізвище</h3>
+            <p>{{user.lastName || 'n/a'}}</p>
+            <h3>Стать</h3>
+            <p>{{user.gender | switchUserGender}}</p>
+            <h3>Email</h3>
+            <p>{{user.email || 'n/a'}}</p>
+            <h3>Адреса</h3>
+            <p>{{user.address || 'n/a'}}</p>
+            <h3>Телефон</h3>
+            <p>{{user.phone || 'n/a'}}</p>
+            <h3>Роль</h3>
+            <p>{{user.role | switchUserRole}}</p>
+            <h3>Активовано</h3>
+            <p>{{user.activated | switchUserActivated}}</p>
+            <button routerLink="/user-settings" class="btn btn-warning pull-right">
+                <span class="fa fa-pencil"></span> Редагувати
+            </button>
         </div>
     </div>
 </div>

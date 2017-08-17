@@ -1,14 +1,14 @@
-<div [ngClass]="{'active': showSidebar}" class="navbar-default sidebar" role="navigation">
+<div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav">
         <ul class="nav" id="side-menu">
             <li class="sidebar-search">
                 <div class="input-group custom-search-form">
                     <input type="text" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
+                        <button class="btn btn-default" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
                 </div><!-- .input-group -->
             </li>
             <li>
@@ -22,10 +22,6 @@
             </li>
         </ul>
     </div><!-- .navbar-static-side -->
-    <button (click)="toggleSidebar()" class="toggle-sidebar btn btn-info">
-        <span *ngIf="!showSidebar" class="fa fa-bars"></span>
-        <span *ngIf="showSidebar" class="fa fa-chevron-up"></span>
-    </button>
 </div><!-- .sidebar-collapse -->
 
 <div class="admin-content-wrapper">

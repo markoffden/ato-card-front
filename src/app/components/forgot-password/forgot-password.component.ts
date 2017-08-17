@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, HostBinding} from '@angular/core';
 
 @Component({
-  selector: 'forgot-password',
-  templateUrl: 'forgot-password.component.html'
+    selector: 'forgot-password',
+    templateUrl: 'forgot-password.component.html'
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  constructor() { }
+    @HostBinding('class.page-content-wrapper') pageContentWrapper: boolean = true;
 
-  ngOnInit() {
-  }
+    constructor() {
+    }
+
+    ngOnInit() {
+    }
 
 }

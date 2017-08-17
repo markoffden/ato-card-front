@@ -9,6 +9,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {ModalService} from "../../../../services/modal.service";
+import {LoaderService} from "../../../../services/loader.service";
 declare var google;
 
 @Component({
@@ -41,13 +42,16 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         private _ds: DomSanitizer,
         private _ar: ActivatedRoute,
         private _es: ErrorService,
-        private _ms: ModalService) {
+        private _ms: ModalService,
+        private _ls: LoaderService) {
         this.users = [];
         this.aliveSubscriptions = true;
         this.buildForm();
     }
 
     ngOnInit() {
+
+        this._ls.turnLoaderOn();
 
         // get error messages
         this._fs.getErrorMessages('outlet').takeWhile(() => this.aliveSubscriptions).subscribe(
@@ -123,6 +127,9 @@ export class EditOutletComponent implements OnInit, OnDestroy {
                 },
                 error => {
                     this._es.handleErrorRes(error);
+                },
+                () => {
+                    this._ls.turnLoaderOff();
                 }
             );
         });
@@ -160,8 +167,7 @@ export class EditOutletComponent implements OnInit, OnDestroy {
     formErrors = {
         'name': '',
         'discountType': '',
-        'address': '',
-        'provider': ''
+        'address': ''
     };
 
     onSubmit() {

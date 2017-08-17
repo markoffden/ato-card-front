@@ -7,11 +7,24 @@ body {
     font-family: "Open Sans", Helvetica, sans-serif;
 }
 
+// --- Global Content Wrapper
+.global-flex-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 50px);
+}
+
+.global-content-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+}
+
 // --- Page Wrapper (not admin)
 .page-content-wrapper {
     position: relative;
-    padding-top: 50px;
-    min-height: 100vh; // TODO
+    padding: 50px 0 75px;
+    flex: 1;
 }
 
 // --- Images

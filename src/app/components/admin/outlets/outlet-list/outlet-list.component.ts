@@ -3,6 +3,7 @@ import {Outlet} from "../../../../models/Outlet";
 import {OutletService} from "../../../../services/outlet.service";
 import {ErrorService} from "../../../../services/error.service";
 import {ModalService} from "../../../../services/modal.service";
+import {LoaderService} from "../../../../services/loader.service";
 
 @Component({
   selector: 'app-outlet-list',
@@ -14,18 +15,26 @@ export class OutletListComponent implements OnInit, OnDestroy {
 
     aliveSubscriptions: boolean;
 
-    constructor(private _os: OutletService, private _ms: ModalService, private _es: ErrorService) {
+    constructor(private _os: OutletService,
+                private _ms: ModalService,
+                private _es: ErrorService,
+                private _ls: LoaderService) {
         this.outlets = [];
         this.aliveSubscriptions = true;
     }
 
     ngOnInit() {
+        this._ls.turnLoaderOn();
+
         this._os.getOutlets().takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
                 this.outlets = res.data;
             },
             error => {
                 this._es.handleErrorRes(error);
+            },
+            () => {
+                this._ls.turnLoaderOff();
             }
         );
 

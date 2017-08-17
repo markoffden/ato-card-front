@@ -9,7 +9,13 @@ export class LoaderService {
     constructor() {
     }
 
-    toggleLoader(value: boolean) {
-        this.showLoader.next(value);
+    turnLoaderOn() {
+        this.showLoader.next(true);
+    }
+
+    turnLoaderOff() {
+        setTimeout(() => {
+            this.showLoader.next(false);
+        }, 1000);
     }
 }

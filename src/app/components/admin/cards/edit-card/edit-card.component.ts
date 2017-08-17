@@ -10,6 +10,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {ModalService} from "../../../../services/modal.service";
+import {LoaderService} from "../../../../services/loader.service";
 
 @Component({
     selector: 'edit-card',
@@ -62,13 +63,16 @@ export class EditCardComponent implements OnInit, OnDestroy {
         private _ds: DomSanitizer,
         private _ar: ActivatedRoute,
         private _es: ErrorService,
-        private _ms: ModalService) {
+        private _ms: ModalService,
+        private _ls: LoaderService) {
         this.aliveSubscriptions = true;
         this.users = [];
         this.buildForm();
     }
 
     ngOnInit() {
+
+        this._ls.turnLoaderOn();
 
         // get error messages
         this._fs.getErrorMessages('card').takeWhile(() => this.aliveSubscriptions).subscribe(res => {
@@ -124,6 +128,9 @@ export class EditCardComponent implements OnInit, OnDestroy {
                 },
                 error => {
                     this._es.handleErrorRes(error);
+                },
+                () => {
+                    this._ls.turnLoaderOff();
                 }
             );
         });

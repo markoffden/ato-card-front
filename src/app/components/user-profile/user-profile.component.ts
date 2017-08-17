@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, HostBinding} from '@angular/core';
 import {User} from "../../models/User";
 import {UserService} from "../../services/user.service";
 import {ErrorService} from "../../services/error.service";
@@ -14,6 +14,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
     aliveSubscriptions: boolean;
 
+    @HostBinding('class.page-content-wrapper') pageContentWrapper: boolean = true;
+
     constructor(private _us: UserService,
                 private _es: ErrorService,
                 private _ls: LoaderService) {
@@ -21,7 +23,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this._ls.toggleLoader(true);
+        this._ls.turnLoaderOn();
 
         this._us.getCurrentUser().takeWhile(() => this.aliveSubscriptions).subscribe(
             res => {
@@ -31,9 +33,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             },
             () => {
-                setTimeout(() => {
-                    this._ls.toggleLoader(false);
-                }, 750);
+                this._ls.turnLoaderOff();
             }
         );
     }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, HostBinding} from '@angular/core';
 
 @Component({
     selector: 'admin',
@@ -7,15 +7,11 @@ import {Component, OnInit} from '@angular/core';
 
 export class AdminComponent implements OnInit {
 
-    showSidebar: boolean = false;
+    @HostBinding('class.global-admin-wrapper') adminWrapper: boolean = true;
 
     constructor() {
     }
 
     ngOnInit() {
-    }
-
-    toggleSidebar() {
-        this.showSidebar = !this.showSidebar;
     }
 }

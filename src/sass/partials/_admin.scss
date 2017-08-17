@@ -2,22 +2,26 @@
     Admin
  */
 
-// --- Global Styles
+// --- Global Admin Wrapper
+.global-admin-wrapper {
+    flex: 1;
+    max-width: 100%;
 
-body {
-    background-color: $gray-lightest;
+    @media screen and (min-width: $tablet) {
+        display: flex;
+        flex-direction: row;
+    }
 }
 
 // --- Wrappers
 .admin-content-wrapper {
-    padding: 30px 15px;
-    min-height: 100vh; // TODO
+    padding: 30px 15px 75px;
     background-color: white;
     position: relative;
 
     @media screen and (min-width: $tablet) {
-        margin: 0 0 0 250px;
-        padding: 30px;
+        flex: 1;
+        padding: 50px 30px 75px;
         border-left: 1px solid darken($gray-lightest, 6.5%);
     }
 
@@ -38,36 +42,9 @@ body {
 
 // --- Sidebar
 .sidebar {
-    position: relative;
-    margin-top: -100%;
-    transition: all 0.5s ease-out;
-
-    &.active {
-        margin-top: 0;
-    }
 
     @media screen and (min-width: $tablet) {
-        z-index: 1;
-        position: absolute;
         width: 250px;
-        margin-top: 0 !important;
-    }
-
-    .toggle-sidebar {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        width: 50px;
-        height: 30px;
-        text-align: center;
-        position: absolute;
-        bottom: -30px;
-        left: 50%;
-        margin-left: -25px;
-        padding: 0;
-
-        @media screen and (min-width: $tablet) {
-            display: none;
-        }
     }
 }
 

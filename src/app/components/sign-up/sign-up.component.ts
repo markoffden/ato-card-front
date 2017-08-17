@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, HostBinding} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
 import {AuthService} from '../../services/auth.service';
@@ -19,6 +19,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
     errorMessages;
 
     aliveSubscriptions: boolean;
+
+    @HostBinding('class.page-content-wrapper') pageContentWrapper: boolean = true;
 
     constructor(private _api: ApiService,
                 private _auth: AuthService,
