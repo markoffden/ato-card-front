@@ -1,30 +1,25 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalService} from "./services/modal.service";
+import {BaseComponent} from "./components/base/base.component";
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html'
 })
 
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent extends BaseComponent implements OnInit {
 
-    modal: any = null;
-
-    aliveSubscriptions: boolean;
+    private modal: any = null;
 
     constructor(private _ms: ModalService) {
-        this.aliveSubscriptions = true;
+        super();
     }
 
     ngOnInit() {
-        this._ms.modal.takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._ms.modal.takeWhile(() => this.isAlive).subscribe(
             res => {
                 this.modal = res;
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
     }
 }

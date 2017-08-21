@@ -1,33 +1,32 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from '../../../../models/User';
 import {UserService} from '../../../../services/user.service';
 import {ErrorService} from "../../../../services/error.service";
 import {ModalService} from "../../../../services/modal.service";
 import {LoaderService} from "../../../../services/loader.service";
+import {BaseComponent} from "../../../base/base.component";
 
 @Component({
     selector: 'user-list',
     templateUrl: 'user-list.component.html'
 })
 
-export class UserListComponent implements OnInit, OnDestroy {
+export class UserListComponent extends BaseComponent implements OnInit {
 
-    private users: User[];
-
-    private aliveSubscriptions: boolean;
+    users: User[];
 
     constructor(private _us: UserService,
                 private _es: ErrorService,
                 private _ms: ModalService,
                 private _ls: LoaderService) {
+        super();
         this.users = [];
-        this.aliveSubscriptions = true;
     }
 
     ngOnInit() {
         this._ls.turnLoaderOn();
 
-        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._us.getUsers().subscribe(
             res => {
                 this.users = res.data;
             },
@@ -39,7 +38,7 @@ export class UserListComponent implements OnInit, OnDestroy {
             }
         );
 
-        this._ms.deleteUser.takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._ms.deleteUser.takeWhile(() => this.isAlive).subscribe(
             id => {
                 if (id) {
                     this.removeUser(id);
@@ -49,8 +48,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
 
     removeUser(id) {
-        this._us.deleteUser(id).takeWhile(() => this.aliveSubscriptions).subscribe(
-            result => {
+        this._us.deleteUser(id).subscribe(
+            res => {
                 let users = this.users;
                 for (let i = 0; i < users.length; i++) {
                     if (users[i]._id == id) {
@@ -62,9 +61,5 @@ export class UserListComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
     }
 }

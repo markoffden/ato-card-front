@@ -195,26 +195,3 @@ section {
         }
     }
 }
-
-// --- Footer
-footer {
-    background-color: $accent-green-darker;
-    padding: 35px 0;
-
-    .item {
-        color: $accent-green-light;
-
-        h3 {
-            margin-top: 0;
-        }
-
-        address {
-            margin-bottom: 20px;
-        }
-
-        .copy {
-            font-size: 12px;
-            margin: 0;
-        }
-    }
-}

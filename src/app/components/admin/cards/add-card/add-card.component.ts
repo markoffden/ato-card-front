@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 import {FormService} from "../../../../services/form.service";
@@ -9,19 +9,22 @@ import {CardService} from "../../../../services/card.service";
 import {Router} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
 import {CustomValidators} from "../../../../shared/custom-validators";
+import {BaseComponent} from "../../../base/base.component";
 
 @Component({
   selector: 'add-card',
   templateUrl: 'add-card.component.html'
 })
 
-export class AddCardComponent implements OnInit, OnDestroy {
+export class AddCardComponent extends BaseComponent implements OnInit {
 
     errorMessages;
 
-    users: User[];
+    formErrors = {
+        'number': ''
+    };
 
-    aliveSubscriptions: boolean;
+    users: User[];
 
     addCardForm: FormGroup;
 
@@ -61,7 +64,7 @@ export class AddCardComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _ds: DomSanitizer,
         private _es: ErrorService) {
-        this.aliveSubscriptions = true;
+        super();
         this.users = [];
         this.buildForm();
     }
@@ -69,7 +72,7 @@ export class AddCardComponent implements OnInit, OnDestroy {
     ngOnInit() {
 
         // get error messages
-        this._fs.getErrorMessages('card').takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._fs.getErrorMessages('card').subscribe(
             res => {
                 this.errorMessages = res;
             },
@@ -79,7 +82,7 @@ export class AddCardComponent implements OnInit, OnDestroy {
         );
 
         // set users list
-        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._us.getUsers().subscribe(
             res => {
                 res.data.forEach((elem) => {
                     elem.fullName = `${elem.firstName} ${elem.lastName}`;
@@ -116,16 +119,12 @@ export class AddCardComponent implements OnInit, OnDestroy {
             status: [1]
         });
 
-        this.addCardForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.addCardForm, data));
+        this.addCardForm.valueChanges.takeWhile(() => this.isAlive).subscribe(data => this.onValueChanged(this.addCardForm, data));
 
         this.onValueChanged(this.addCardForm);
     }
 
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'number': ''
-    };
 
     onSubmit() {
         if (this.addCardForm.valid) {
@@ -137,7 +136,7 @@ export class AddCardComponent implements OnInit, OnDestroy {
         let payload = this.addCardForm.value;
         payload.holder = payload.holder ? payload.holder._id : null;
         payload.dateIssued = payload.dateIssued.jsdate ? payload.dateIssued.jsdate : new Date();
-        this._cs.addCard(payload).takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._cs.addCard(payload).subscribe(
             res => {
                 this._router.navigate(['admin/cards']);
             },
@@ -151,8 +150,4 @@ export class AddCardComponent implements OnInit, OnDestroy {
         let html = `<span>${data.firstName} ${data.lastName}</span>`;
         return this._ds.bypassSecurityTrustHtml(html);
     };
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
-    }
 }

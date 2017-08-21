@@ -1,5 +1,5 @@
-import {Component, OnInit, OnDestroy, HostBinding} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Component, OnInit, HostBinding} from '@angular/core';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {UserService} from "../../services/user.service";
 
 import {CustomValidators} from "../../shared/custom-validators";
@@ -8,23 +8,31 @@ import {User} from "../../models/User";
 import {ErrorService} from "../../services/error.service";
 import {ModalService} from "../../services/modal.service";
 import {LoaderService} from "../../services/loader.service";
+import {BaseComponent} from "../base/base.component";
 
 @Component({
     selector: 'user-settings',
     templateUrl: 'user-settings.component.html'
 })
 
-export class UserSettingsComponent implements OnInit, OnDestroy {
+export class UserSettingsComponent extends BaseComponent implements OnInit {
+
+    @HostBinding('class.page-content-wrapper') pageContentWrapper: boolean = true;
 
     editUserForm: FormGroup;
 
     errorMessages;
 
+    formErrors = {
+        'firstName': '',
+        'lastName': '',
+        'email': ''
+        // ,
+        // 'password': '',
+        // 'confirmPassword': ''
+    };
+
     user: User;
-
-    aliveSubscriptions: boolean;
-
-    @HostBinding('class.page-content-wrapper') pageContentWrapper: boolean = true;
 
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
@@ -32,14 +40,14 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
                 private _es: ErrorService,
                 private _ms: ModalService,
                 private _ls: LoaderService) {
-        this.aliveSubscriptions = true;
+        super();
         this.buildForm();
     }
 
     ngOnInit() {
         this._ls.turnLoaderOn();
 
-        this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._fs.getErrorMessages('user').subscribe(
             res => {
                 this.errorMessages = res;
             },
@@ -48,7 +56,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
             }
         );
 
-        this._us.getCurrentUser().takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._us.getCurrentUser().subscribe(
             res => {
                 this.user = res.data;
                 let user = res.data;
@@ -103,22 +111,13 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
             // }
         );
 
-        this.editUserForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.editUserForm, data));
+        this.editUserForm.valueChanges.takeWhile(() => this.isAlive).subscribe(data => this.onValueChanged(this.editUserForm, data));
 
         this.onValueChanged(this.editUserForm);
     }
 
     // form validation
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'firstName': '',
-        'lastName': '',
-        'email': ''
-        // ,
-        // 'password': '',
-        // 'confirmPassword': ''
-    };
 
     onSubmit(): void {
         if (this.editUserForm.valid) {
@@ -133,7 +132,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
                 payload[key] = this.editUserForm.value[key];
             }
         }
-        this._us.updateUser(this.user._id, payload).takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._us.updateUser(this.user._id, payload).subscribe(
             res => {
                 this._ms.createAlert('success', 'Дані про користувача оновлено');
             },
@@ -141,9 +140,5 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
     }
 }

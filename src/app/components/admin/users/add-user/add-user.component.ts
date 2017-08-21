@@ -6,31 +6,38 @@ import {CustomValidators} from "../../../../shared/custom-validators";
 import {FormService} from "../../../../services/form.service";
 import {Router} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
+import {BaseComponent} from "../../../base/base.component";
 
 @Component({
     selector: 'add-user',
     templateUrl: 'add-user.component.html'
 })
 
-export class AddUserComponent implements OnInit, OnDestroy {
+export class AddUserComponent extends BaseComponent implements OnInit {
 
     addUserForm: FormGroup;
 
     errorMessages;
 
-    aliveSubsciptions: boolean;
+    formErrors = {
+        'firstName': '',
+        'lastName': '',
+        'email': '',
+        'password': '',
+        'confirmPassword': ''
+    };
 
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
                 private _fs: FormService,
                 private _router: Router,
                 private _es: ErrorService) {
-        this.aliveSubsciptions = true;
+        super();
         this.buildForm();
     }
 
     ngOnInit() {
-        this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubsciptions).subscribe(
+        this._fs.getErrorMessages('user').subscribe(
             res => {
                 this.errorMessages = res;
             },
@@ -71,21 +78,13 @@ export class AddUserComponent implements OnInit, OnDestroy {
             validator: CustomValidators.matchValue('confirmPassword', 'password')
         });
 
-        this.addUserForm.valueChanges.takeWhile(() => this.aliveSubsciptions).subscribe(data => this.onValueChanged(this.addUserForm, data));
+        this.addUserForm.valueChanges.takeWhile(() => this.isAlive).subscribe(data => this.onValueChanged(this.addUserForm, data));
 
         this.onValueChanged(this.addUserForm);
     }
 
     // form validation
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'firstName': '',
-        'lastName': '',
-        'email': '',
-        'password': '',
-        'confirmPassword': ''
-    };
 
     onSubmit() {
         if (this.addUserForm.valid) {
@@ -94,7 +93,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     }
 
     addUser() {
-        this._us.addUser(this.addUserForm.value).takeWhile(() => this.aliveSubsciptions).subscribe(
+        this._us.addUser(this.addUserForm.value).subscribe(
             res => {
                 this._router.navigate(['admin/users']);
             },
@@ -102,9 +101,5 @@ export class AddUserComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubsciptions = false;
     }
 }

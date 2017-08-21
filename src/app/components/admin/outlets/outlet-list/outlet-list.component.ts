@@ -1,32 +1,31 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Outlet} from "../../../../models/Outlet";
 import {OutletService} from "../../../../services/outlet.service";
 import {ErrorService} from "../../../../services/error.service";
 import {ModalService} from "../../../../services/modal.service";
 import {LoaderService} from "../../../../services/loader.service";
+import {BaseComponent} from "../../../base/base.component";
 
 @Component({
   selector: 'app-outlet-list',
   templateUrl: 'outlet-list.component.html'
 })
-export class OutletListComponent implements OnInit, OnDestroy {
+export class OutletListComponent extends BaseComponent implements OnInit {
 
     outlets: Outlet[];
-
-    aliveSubscriptions: boolean;
 
     constructor(private _os: OutletService,
                 private _ms: ModalService,
                 private _es: ErrorService,
                 private _ls: LoaderService) {
+        super();
         this.outlets = [];
-        this.aliveSubscriptions = true;
     }
 
     ngOnInit() {
         this._ls.turnLoaderOn();
 
-        this._os.getOutlets().takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._os.getOutlets().subscribe(
             res => {
                 this.outlets = res.data;
             },
@@ -38,7 +37,7 @@ export class OutletListComponent implements OnInit, OnDestroy {
             }
         );
 
-        this._ms.deleteOutlet.takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._ms.deleteOutlet.takeWhile(() => this.isAlive).subscribe(
             id => {
                 if (id) {
                     this.removeOutlet(id);
@@ -48,8 +47,8 @@ export class OutletListComponent implements OnInit, OnDestroy {
     }
 
     removeOutlet(id) {
-        this._os.deleteOutlet(id).takeWhile(() => this.aliveSubscriptions).subscribe(
-            result => {
+        this._os.deleteOutlet(id).subscribe(
+            res => {
                 let outlets = this.outlets;
                 for (let i = 0; i < outlets.length; i++) {
                     if (outlets[i]._id == id) {
@@ -61,9 +60,5 @@ export class OutletListComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
     }
 }

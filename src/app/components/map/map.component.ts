@@ -10,7 +10,7 @@ declare var google;
 })
 export class MapComponent implements OnInit {
 
-    ck = { lat: 49.441388, lng: 32.064458 };
+    readonly ck = { lat: 49.441388, lng: 32.064458 };
 
     map: any = null;
 

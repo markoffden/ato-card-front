@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, HostBinding} from '@angular/core';
+import {Component, OnInit, HostBinding} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
 import {AuthService} from '../../services/auth.service';
@@ -6,19 +6,26 @@ import {FormService} from "../../services/form.service";
 import {CustomValidators} from "../../shared/custom-validators";
 import {Router} from '@angular/router';
 import {ErrorService} from "../../services/error.service";
+import {BaseComponent} from "../base/base.component";
 
 @Component({
     selector: 'sign-up',
     templateUrl: 'sign-up.component.html'
 })
 
-export class SignUpComponent implements OnInit, OnDestroy {
+export class SignUpComponent extends BaseComponent implements OnInit {
 
     signUpForm: FormGroup;
 
     errorMessages;
 
-    aliveSubscriptions: boolean;
+    formErrors = {
+        'firstName': '',
+        'lastName': '',
+        'email': '',
+        'password': '',
+        'confirmPassword': ''
+    };
 
     @HostBinding('class.page-content-wrapper') pageContentWrapper: boolean = true;
 
@@ -28,23 +35,19 @@ export class SignUpComponent implements OnInit, OnDestroy {
                 private _fs: FormService,
                 private _router: Router,
                 private _es: ErrorService) {
-        this.aliveSubscriptions = true;
+        super();
         this.buildForm();
     }
 
     ngOnInit() {
-        if (this._auth.isSignedIn()) {
-            this._router.navigate(['']);
-        } else {
-            this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(
-                res => {
-                    this.errorMessages = res;
-                },
-                error => {
-                    this._es.handleErrorRes(error);
-                }
-            );
-        }
+        this._fs.getErrorMessages('user').subscribe(
+            res => {
+                this.errorMessages = res;
+            },
+            error => {
+                this._es.handleErrorRes(error);
+            }
+        );
     }
 
     buildForm(): void {
@@ -76,21 +79,13 @@ export class SignUpComponent implements OnInit, OnDestroy {
             validator: CustomValidators.matchValue('confirmPassword', 'password')
         });
 
-        this.signUpForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.signUpForm, data));
+        this.signUpForm.valueChanges.takeWhile(() => this.isAlive).subscribe(data => this.onValueChanged(this.signUpForm, data));
 
         this.onValueChanged(this.signUpForm);
     }
 
     // form validation
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'firstName': '',
-        'lastName': '',
-        'email': '',
-        'password': '',
-        'confirmPassword': ''
-    };
 
     onSubmit() {
         if (!this.signUpForm.valid) return;
@@ -99,7 +94,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
     signUp() {
         const values = this.signUpForm.value;
-        this._api.post('sign-up', values).takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._api.post('sign-up', values).subscribe(
             res => {
                 this._auth.setToken(res.data.token);
                 this._router.navigate(['']);
@@ -108,9 +103,5 @@ export class SignUpComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
     }
 }

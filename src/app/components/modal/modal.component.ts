@@ -7,7 +7,7 @@ import {ModalService} from "../../services/modal.service";
 })
 export class ModalComponent implements OnInit {
 
-    @Input() modal: any = null;
+    @Input() private modal: any = null;
 
     constructor(private _ms: ModalService) {
 

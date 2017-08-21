@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {FormService} from "../../../../services/form.service";
 import {UserService} from "../../../../services/user.service";
@@ -8,25 +8,31 @@ import {OutletService} from "../../../../services/outlet.service";
 import {Router} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
 import {CustomValidators} from "../../../../shared/custom-validators";
-declare var google;
+import {BaseComponent} from "../../../base/base.component";
+declare const google;
 
 @Component({
   selector: 'add-outlet',
   templateUrl: 'add-outlet.component.html'
 })
 
-export class AddOutletComponent implements OnInit, OnDestroy {
+export class AddOutletComponent extends BaseComponent implements OnInit {
 
     errorMessages;
 
-    users: User[];
+    formErrors = {
+        'name': '',
+        'discountType': '',
+        'address': '',
+        'provider': ''
+    };
 
-    aliveSubscriptions: boolean;
+    users: User[];
 
     addOutletForm: FormGroup;
 
     // map config
-    ck = { lat: 49.441388, lng: 32.064458 };
+    readonly ck = { lat: 49.441388, lng: 32.064458 };
     map: any = null;
     marker: any = null;
 
@@ -38,15 +44,15 @@ export class AddOutletComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _ds: DomSanitizer,
         private _es: ErrorService) {
+        super();
         this.users = [];
-        this.aliveSubscriptions = true;
         this.buildForm();
     }
 
     ngOnInit() {
 
         // get error messages
-        this._fs.getErrorMessages('outlet').takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._fs.getErrorMessages('outlet').subscribe(
             res => {
                 this.errorMessages = res;
             },
@@ -56,7 +62,7 @@ export class AddOutletComponent implements OnInit, OnDestroy {
         );
 
         // set users list
-        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._us.getUsers().subscribe(
             res => {
                 res.data.forEach((elem) => {
                     elem.fullName = `${elem.firstName} ${elem.lastName}`;
@@ -78,7 +84,6 @@ export class AddOutletComponent implements OnInit, OnDestroy {
 
         this.map.addListener('dblclick', (e) => {
             this.placeMarker(e.latLng);
-            console.log(e.latLng);
         });
     }
 
@@ -103,19 +108,12 @@ export class AddOutletComponent implements OnInit, OnDestroy {
             provider: [null]
         });
 
-        this.addOutletForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.addOutletForm, data));
+        this.addOutletForm.valueChanges.takeWhile(() => this.isAlive).subscribe(data => this.onValueChanged(this.addOutletForm, data));
 
         this.onValueChanged(this.addOutletForm);
     }
 
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'name': '',
-        'discountType': '',
-        'address': '',
-        'provider': ''
-    };
 
     onSubmit() {
         if (this.addOutletForm.valid) {
@@ -143,8 +141,4 @@ export class AddOutletComponent implements OnInit, OnDestroy {
         let html = `<span>${data.firstName} ${data.lastName}</span>`;
         return this._ds.bypassSecurityTrustHtml(html);
     };
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
-    }
 }

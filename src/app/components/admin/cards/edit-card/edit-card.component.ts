@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {INgxMyDpOptions} from 'ngx-mydatepicker';
 import {FormService} from "../../../../services/form.service";
@@ -11,21 +11,26 @@ import {ErrorService} from "../../../../services/error.service";
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {ModalService} from "../../../../services/modal.service";
 import {LoaderService} from "../../../../services/loader.service";
+import {BaseComponent} from "../../../base/base.component";
 
 @Component({
     selector: 'edit-card',
     templateUrl: 'edit-card.component.html'
 })
 
-export class EditCardComponent implements OnInit, OnDestroy {
+export class EditCardComponent extends BaseComponent implements OnInit {
 
     errorMessages;
 
+    formErrors = {
+        'number': ''
+    };
+
     users: User[];
 
-    private cardId: string;
+    cardId: string;
 
-    aliveSubscriptions: boolean;
+    editCardForm: FormGroup;
 
     datePickerOpts: INgxMyDpOptions = {
         dayLabels: {
@@ -65,7 +70,7 @@ export class EditCardComponent implements OnInit, OnDestroy {
         private _es: ErrorService,
         private _ms: ModalService,
         private _ls: LoaderService) {
-        this.aliveSubscriptions = true;
+        super();
         this.users = [];
         this.buildForm();
     }
@@ -75,12 +80,12 @@ export class EditCardComponent implements OnInit, OnDestroy {
         this._ls.turnLoaderOn();
 
         // get error messages
-        this._fs.getErrorMessages('card').takeWhile(() => this.aliveSubscriptions).subscribe(res => {
+        this._fs.getErrorMessages('card').subscribe(res => {
             this.errorMessages = res;
         });
 
         // set users list
-        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(res => {
+        this._us.getUsers().subscribe(res => {
             res.data.forEach((elem) => {
                 elem.fullName = `${elem.firstName} ${elem.lastName}`;
                 this.users.push(elem);
@@ -88,9 +93,9 @@ export class EditCardComponent implements OnInit, OnDestroy {
         });
 
         // get card and set all form values
-        this._ar.params.takeWhile(() => this.aliveSubscriptions).subscribe(params => {
+        this._ar.params.takeWhile(() => this.isAlive).subscribe(params => {
             this.cardId = params['id'];
-            this._cs.getCardById(params['id']).takeWhile(() => this.aliveSubscriptions).subscribe(
+            this._cs.getCardById(params['id']).subscribe(
                 res => {
                     let card = res.data;
                     if (card.dateIssued) {
@@ -106,7 +111,7 @@ export class EditCardComponent implements OnInit, OnDestroy {
                         });
                     }
                     if (card.holder) {
-                        this._us.getUserById(card.holder).takeWhile(() => this.aliveSubscriptions).subscribe(
+                        this._us.getUserById(card.holder).subscribe(
                             data => {
                                 let cardHolder = data.data;
                                 cardHolder.toString = function () {
@@ -136,8 +141,6 @@ export class EditCardComponent implements OnInit, OnDestroy {
         });
     }
 
-    editCardForm: FormGroup;
-
     buildForm(): void {
         this.editCardForm = this._fb.group({
             number: [null, [
@@ -156,10 +159,6 @@ export class EditCardComponent implements OnInit, OnDestroy {
     }
 
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'number': ''
-    };
 
     onSubmit() {
         if (this.editCardForm.valid) {
@@ -185,8 +184,4 @@ export class EditCardComponent implements OnInit, OnDestroy {
         let html = `<span>${data.firstName} ${data.lastName}</span>`;
         return this._ds.bypassSecurityTrustHtml(html);
     };
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
-    }
 }

@@ -1,33 +1,32 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Card} from "../../../../models/Card";
 import {CardService} from '../../../../services/card.service';
 import {ErrorService} from "../../../../services/error.service";
 import {ModalService} from "../../../../services/modal.service";
 import {LoaderService} from "../../../../services/loader.service";
+import {BaseComponent} from "../../../base/base.component";
 
 @Component({
   selector: 'card-list',
   templateUrl: './card-list.component.html'
 })
 
-export class CardListComponent implements OnInit, OnDestroy {
+export class CardListComponent extends BaseComponent implements OnInit {
 
     cards: Card[];
-
-    aliveSubscriptions: boolean;
 
     constructor(private _cs: CardService,
                 private _ms: ModalService,
                 private _es: ErrorService,
                 private _ls: LoaderService) {
+        super();
         this.cards = [];
-        this.aliveSubscriptions = true;
     }
 
     ngOnInit() {
         this._ls.turnLoaderOn();
 
-        this._cs.getCards().takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._cs.getCards().subscribe(
             res => {
                 this.cards = res.data;
             },
@@ -39,7 +38,7 @@ export class CardListComponent implements OnInit, OnDestroy {
             }
         );
 
-        this._ms.deleteCard.takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._ms.deleteCard.takeWhile(() => this.isAlive).subscribe(
             id => {
                 if (id) {
                     this.removeCard(id);
@@ -49,7 +48,7 @@ export class CardListComponent implements OnInit, OnDestroy {
     }
 
     removeCard(id) {
-        this._cs.deleteCard(id).takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._cs.deleteCard(id).subscribe(
             result => {
                 let cards = this.cards;
                 for (let i = 0; i < cards.length; i++) {
@@ -62,9 +61,5 @@ export class CardListComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
     }
 }

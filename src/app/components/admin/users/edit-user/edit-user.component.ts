@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {UserService} from "../../../../services/user.service";
 
@@ -8,21 +8,29 @@ import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../../../services/error.service";
 import {ModalService} from "../../../../services/modal.service";
 import {LoaderService} from "../../../../services/loader.service";
+import {BaseComponent} from "../../../base/base.component";
 
 @Component({
     selector: 'edit-user',
     templateUrl: 'edit-user.component.html'
 })
 
-export class EditUserComponent implements OnInit, OnDestroy {
+export class EditUserComponent extends BaseComponent implements OnInit {
 
     editUserForm: FormGroup;
 
     errorMessages;
 
-    userId: string;
+    formErrors = {
+        'firstName': '',
+        'lastName': '',
+        'email': ''
+        // ,
+        // 'password': '',
+        // 'confirmPassword': ''
+    };
 
-    aliveSubscriptions: boolean;
+    userId: string;
 
     constructor(private _fb: FormBuilder,
                 private _us: UserService,
@@ -31,20 +39,20 @@ export class EditUserComponent implements OnInit, OnDestroy {
                 private _es: ErrorService,
                 private _ms: ModalService,
                 private _ls: LoaderService) {
-        this.aliveSubscriptions = true;
+        super();
         this.buildForm();
     }
 
     ngOnInit() {
         this._ls.turnLoaderOn();
 
-        this._fs.getErrorMessages('user').takeWhile(() => this.aliveSubscriptions).subscribe(res => {
+        this._fs.getErrorMessages('user').subscribe(res => {
             this.errorMessages = res;
         });
 
-        this._ar.params.takeWhile(() => this.aliveSubscriptions).subscribe(params => {
+        this._ar.params.takeWhile(() => this.isAlive).subscribe(params => {
             this.userId = params['id'];
-            this._us.getUserById(params['id']).takeWhile(() => this.aliveSubscriptions).subscribe(
+            this._us.getUserById(params['id']).subscribe(
                 res => {
                     let user = res.data;
                     this.editUserForm.setValue({
@@ -99,22 +107,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
         // }
         );
 
-        this.editUserForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.editUserForm, data));
+        this.editUserForm.valueChanges.takeWhile(() => this.isAlive).subscribe(data => this.onValueChanged(this.editUserForm, data));
 
         this.onValueChanged(this.editUserForm);
     }
 
     // form validation
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'firstName': '',
-        'lastName': '',
-        'email': ''
-        // ,
-        // 'password': '',
-        // 'confirmPassword': ''
-    };
 
     onSubmit(): void {
         if (this.editUserForm.valid) {
@@ -129,7 +128,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
                 payload[key] = this.editUserForm.value[key];
             }
         }
-        this._us.updateUser(this.userId, payload).takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._us.updateUser(this.userId, payload).subscribe(
             res => {
                 this._ms.createAlert('success', 'Дані про користувача оновлено');
             },
@@ -137,9 +136,5 @@ export class EditUserComponent implements OnInit, OnDestroy {
                 this._es.handleErrorRes(error);
             }
         );
-    }
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
     }
 }

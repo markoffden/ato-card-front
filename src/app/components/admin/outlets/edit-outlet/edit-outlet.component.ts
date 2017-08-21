@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {FormService} from "../../../../services/form.service";
 import {UserService} from "../../../../services/user.service";
@@ -10,16 +10,23 @@ import {ErrorService} from "../../../../services/error.service";
 import {CustomValidators} from "../../../../shared/custom-validators";
 import {ModalService} from "../../../../services/modal.service";
 import {LoaderService} from "../../../../services/loader.service";
-declare var google;
+import {BaseComponent} from "../../../base/base.component";
+declare const google;
 
 @Component({
     selector: 'edit-outlet',
     templateUrl: 'edit-outlet.component.html'
 })
 
-export class EditOutletComponent implements OnInit, OnDestroy {
+export class EditOutletComponent extends BaseComponent implements OnInit {
 
     errorMessages;
+
+    formErrors = {
+        'name': '',
+        'discountType': '',
+        'address': ''
+    };
 
     users: User[];
 
@@ -27,10 +34,8 @@ export class EditOutletComponent implements OnInit, OnDestroy {
 
     editOutletForm: FormGroup;
 
-    aliveSubscriptions: boolean;
-
     // map config
-    ck = { lat: 49.441388, lng: 32.064458 };
+    readonly ck = { lat: 49.441388, lng: 32.064458 };
     map: any = null;
     marker: any = null;
 
@@ -44,8 +49,8 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         private _es: ErrorService,
         private _ms: ModalService,
         private _ls: LoaderService) {
+        super();
         this.users = [];
-        this.aliveSubscriptions = true;
         this.buildForm();
     }
 
@@ -54,7 +59,7 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         this._ls.turnLoaderOn();
 
         // get error messages
-        this._fs.getErrorMessages('outlet').takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._fs.getErrorMessages('outlet').subscribe(
             res => {
                 this.errorMessages = res;
             },
@@ -64,7 +69,7 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         );
 
         // set users list
-        this._us.getUsers().takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._us.getUsers().subscribe(
             res => {
                 res.data.forEach((elem) => {
                     elem.fullName = `${elem.firstName} ${elem.lastName}`;
@@ -89,13 +94,13 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         });
 
         // get outlet data and patch form
-        this._ar.params.takeWhile(() => this.aliveSubscriptions).subscribe(params => {
+        this._ar.params.takeWhile(() => this.isAlive).subscribe(params => {
             this.outletId = params['id'];
-            this._os.getOutletById(params['id']).takeWhile(() => this.aliveSubscriptions).subscribe(
+            this._os.getOutletById(params['id']).subscribe(
                 res => {
                     let outlet = res.data;
                     if (outlet.provider) {
-                        this._us.getUserById(outlet.provider).takeWhile(() => this.aliveSubscriptions).subscribe(
+                        this._us.getUserById(outlet.provider).subscribe(
                             data => {
                                 let outletProvider = data.data;
                                 outletProvider.toString = function () {
@@ -157,18 +162,12 @@ export class EditOutletComponent implements OnInit, OnDestroy {
             provider: [null]
         });
 
-        this.editOutletForm.valueChanges.takeWhile(() => this.aliveSubscriptions).subscribe(data => this.onValueChanged(this.editOutletForm, data));
+        this.editOutletForm.valueChanges.takeWhile(() => this.isAlive).subscribe(data => this.onValueChanged(this.editOutletForm, data));
 
         this.onValueChanged(this.editOutletForm);
     }
 
     onValueChanged = this._fs.processErrors.bind(this);
-
-    formErrors = {
-        'name': '',
-        'discountType': '',
-        'address': ''
-    };
 
     onSubmit() {
         if (this.editOutletForm.valid) {
@@ -181,7 +180,7 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         payload.provider = payload.provider ? payload.provider._id : null;
         payload.latitude = this.marker ? this.marker.position.lat() : null;
         payload.longitude = this.marker ? this.marker.position.lng() : null;
-        this._os.updateOutlet(this.outletId, payload).takeWhile(() => this.aliveSubscriptions).subscribe(
+        this._os.updateOutlet(this.outletId, payload).subscribe(
             res => {
                 this._ms.createAlert('success', 'Дані про заклад оновлено');
             },
@@ -195,8 +194,4 @@ export class EditOutletComponent implements OnInit, OnDestroy {
         let html = `<span>${data.firstName} ${data.lastName}</span>`;
         return this._ds.bypassSecurityTrustHtml(html);
     };
-
-    ngOnDestroy() {
-        this.aliveSubscriptions = false;
-    }
 }

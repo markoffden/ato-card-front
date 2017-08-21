@@ -54,6 +54,7 @@ import { MapComponent } from './components/map/map.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import {LoaderService} from "./services/loader.service";
 import { FooterComponent } from './components/footer/footer.component';
+import { BaseComponent } from './components/base/base.component';
 
 @NgModule({
     declarations: [
@@ -86,7 +87,8 @@ import { FooterComponent } from './components/footer/footer.component';
         ModalComponent,
         MapComponent,
         LoaderComponent,
-        FooterComponent
+        FooterComponent,
+        BaseComponent
     ],
     imports: [
         BrowserModule,
