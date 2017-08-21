@@ -7,6 +7,7 @@ import {CustomValidators} from "../../shared/custom-validators";
 import {Router} from '@angular/router';
 import {ErrorService} from "../../services/error.service";
 import {BaseComponent} from "../base/base.component";
+import {UserService} from "../../services/user.service";
 
 @Component({
     selector: 'sign-up',
@@ -34,7 +35,8 @@ export class SignUpComponent extends BaseComponent implements OnInit {
                 private _fb: FormBuilder,
                 private _fs: FormService,
                 private _router: Router,
-                private _es: ErrorService) {
+                private _es: ErrorService,
+                private _us: UserService) {
         super();
         this.buildForm();
     }
@@ -97,6 +99,7 @@ export class SignUpComponent extends BaseComponent implements OnInit {
         this._api.post('sign-up', values).subscribe(
             res => {
                 this._auth.setToken(res.data.token);
+                this._us.setCurrentUser(res.data.user);
                 this._router.navigate(['']);
             },
             error => {

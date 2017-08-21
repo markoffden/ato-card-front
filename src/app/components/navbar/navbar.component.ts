@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
-import {Router, NavigationStart} from "@angular/router";
 import {UserService} from "../../services/user.service";
-import {ErrorService} from "../../services/error.service";
 import {BaseComponent} from "../base/base.component";
 
 @Component({
@@ -17,36 +15,30 @@ export class NavbarComponent extends BaseComponent implements OnInit {
     isAdmin: boolean = false;
 
     constructor(private _auth: AuthService,
-                private _us: UserService,
-                private _router: Router,
-                private _es: ErrorService) {
+                private _us: UserService) {
         super();
     }
 
     ngOnInit() {
-        this._router.events.takeWhile(() => this.isAlive).subscribe(event => {
-            if (event instanceof NavigationStart) {
-                this.verifyCurrentUser();
-            }
-        });
+        this.verifyCurrentUser();
     }
 
     verifyCurrentUser() {
-        this.isSignedIn = this._auth.isSignedIn();
-        this.isAdmin = false;
-        if (this.isSignedIn) {
-            this._us.getCurrentUser().subscribe(
-                res => {
-                    this.isAdmin = res.data.role === 4;
-                },
-                error => {
-                    this._es.handleErrorRes(error);
+        this._us.currentUser.takeWhile(() => this.isAlive).subscribe(
+            res => {
+                if (res !== null) {
+                    this.isSignedIn = true;
+                    this.isAdmin = res.role === 4;
+                } else {
+                    this.isSignedIn = false;
+                    this.isAdmin = false;
                 }
-            );
-        }
+            }
+        );
     }
 
     signOut() {
+        this._us.setCurrentUser(null);
         this._auth.signOut();
     }
 }

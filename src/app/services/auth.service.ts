@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthService {
-    storageKey: string = 'ato-card-jwt';
+    readonly storageKey: string = 'ato-card-jwt';
 
     constructor (private _router: Router) {
 

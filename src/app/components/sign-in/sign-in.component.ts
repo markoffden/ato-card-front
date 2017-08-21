@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {ErrorService} from "../../services/error.service";
 import {CustomValidators} from "../../shared/custom-validators";
 import {BaseComponent} from "../base/base.component";
+import {UserService} from "../../services/user.service";
 
 @Component({
     selector: 'sign-in',
@@ -31,7 +32,8 @@ export class SignInComponent extends BaseComponent implements OnInit {
                 private _router: Router,
                 private _fb: FormBuilder,
                 private _fs: FormService,
-                private _es: ErrorService) {
+                private _es: ErrorService,
+                private _us: UserService) {
         super();
         this.buildForm();
     }
@@ -79,6 +81,7 @@ export class SignInComponent extends BaseComponent implements OnInit {
         this._api.post('authenticate', values).subscribe(
             res => {
                 this._auth.setToken(res.data.token);
+                this._us.setCurrentUser(res.data.user);
                 this._router.navigate(['']);
             },
             error => {
