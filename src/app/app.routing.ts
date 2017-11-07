@@ -20,6 +20,7 @@ import {ForgotPasswordComponent} from "./components/forgot-password/forgot-passw
 import {UserProfileComponent} from "./components/user-profile/user-profile.component";
 import {UserSettingsComponent} from "./components/user-settings/user-settings.component";
 import {EditOutletComponent} from "./components/admin/outlets/edit-outlet/edit-outlet.component";
+import {GetCardComponent} from './components/get-card/get-card.component';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
     { path: 'sign-up', component: SignUpComponent, canActivate: [NoAuthGuard] },
     { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: 'user-settings', component: UserSettingsComponent, canActivate: [AuthGuard] },
+    { path: 'get-card', component: GetCardComponent, canActivate: [AuthGuard] },
     { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminGuard], children: [
         { path: 'users', component: UserListComponent },
         { path: 'users/add-new', component: AddUserComponent },

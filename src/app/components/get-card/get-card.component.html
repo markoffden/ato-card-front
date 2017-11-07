@@ -1,0 +1,12 @@
+<div class="container">
+    <h1>Отримати карту</h1>
+    <p>Інструкції щодо отримання карти.</p>
+    <input *ngIf="canReadFiles(); else: cannotReadFiles" name="upload-docs" type="file" (change)="fileAdded()" #uploadDocs>
+    <ng-template #cannotReadFiles>
+        <p>Будь ласка, оновіть ваш браузер щоб мати можливість завантажити файл(и)</p>
+    </ng-template>
+    <div *ngIf="imageUploaded">
+        <img [attr.src]="imageUploaded" alt="Image">
+        <button (click)="uploadDocs()">Додати фото</button>
+    </div>
+</div>
